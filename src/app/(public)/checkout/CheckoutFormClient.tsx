@@ -141,7 +141,7 @@ export default function CheckoutFormClient({ sim }: CheckoutFormProps) {
           >
             {!isPickup && <option value={PaymentMethod.COD}>Thanh toán khi nhận hàng (COD)</option>}
             <option value={PaymentMethod.BANK_TRANSFER}>Chuyển khoản ngân hàng</option>
-            {isPickup && <option value={PaymentMethod.CASH}>Tiền mặt tại cửa hàng</option>}
+            {isPickup && <option value={PaymentMethod.STORE_CASH}>Tiền mặt tại cửa hàng</option>}
             {!isPickup && <option value={PaymentMethod.MOMO}>Ví Momo</option>}
             {!isPickup && <option value={PaymentMethod.ZALOPAY}>Ví ZaloPay</option>}
           </select>
