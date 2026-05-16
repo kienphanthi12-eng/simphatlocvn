@@ -6,80 +6,48 @@ import { ShoppingCart } from "lucide-react";
 
 interface SimCardProps {
   sim: Pick<Sim, "id" | "phone" | "type" | "price" | "priceOriginal" | "featured">;
-  view?: "grid" | "table";
 }
 
-export function SimCard({ sim, view = "grid" }: SimCardProps) {
+export function SimCard({ sim }: SimCardProps) {
   const isSale = sim.priceOriginal && sim.priceOriginal > sim.price;
 
-  if (view === "table") {
-    return (
-      <div className="flex items-center justify-between p-4 bg-white border-b hover:bg-gray-50 transition group">
-        <div className="flex items-center gap-6">
-          <Link href={`/sims/${sim.phone}`} className="text-phone group-hover:text-[var(--blue-500)] transition">
-            {formatPhone(sim.phone)}
-          </Link>
-          <div className="hidden md:flex gap-2 items-center">
-            <span className="text-[11px] font-[600] tracking-[0.8px] uppercase text-white bg-[var(--blue-500)] px-2 py-0.5 rounded">Vina</span>
-            <SimTypeBadge type={sim.type} />
-          </div>
-        </div>
-        
-        <div className="flex items-center gap-6">
-          <div className="text-right">
-            <div className="text-price">{formatPrice(sim.price)}</div>
-            {isSale && (
-              <div className="text-price-old">{formatPrice(sim.priceOriginal!)}</div>
-            )}
-          </div>
-          <Link 
-            href={`/checkout?phone=${sim.phone}`}
-            className="hidden sm:flex bg-[var(--blue-500)] text-white px-[18px] py-[8px] rounded-[8px] font-sans text-[13px] font-[700] tracking-[0.3px] hover:bg-[var(--blue-600)] transition items-center gap-2"
-          >
-            Mua
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  // Grid View
   return (
-    <div className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition overflow-hidden group">
-      <div className="p-5 text-center relative">
-        {sim.featured && (
-          <span className="absolute top-3 right-3 text-[10px] uppercase font-bold text-white bg-red-500 px-2 py-0.5 rounded shadow-sm">
-            Hot
-          </span>
-        )}
-        <span className="absolute top-3 left-3 text-[11px] font-[600] tracking-[0.8px] uppercase text-[var(--blue-500)] bg-[var(--blue-50)] border border-[var(--blue-100)] px-2 py-0.5 rounded">
-          Vinaphone
-        </span>
-        
-        <Link href={`/sims/${sim.phone}`} className="block mt-6 mb-2">
-          <h3 className="text-phone group-hover:text-[var(--blue-500)] transition">
-            {formatPhone(sim.phone)}
-          </h3>
+    <tr className="hover:bg-[#F7FAFF] border-b border-[#E2E8F0] group transition-colors">
+      {/* Cột 1: Số điện thoại */}
+      <td className="py-3.5 px-4 whitespace-nowrap">
+        <Link href={`/sims/${sim.phone}`} className="block">
+          <div className="text-phone text-[20px] group-hover:text-[#005BAC] transition-colors">{formatPhone(sim.phone)}</div>
+          <div className="text-[11px] text-[#64748B] mt-0.5">Vinaphone</div>
         </Link>
-        
-        <div className="mb-4">
-          <SimTypeBadge type={sim.type} />
+      </td>
+      
+      {/* Cột 2: Badges */}
+      <td className="py-3.5 px-4 whitespace-nowrap">
+        <div className="flex flex-col items-start gap-1.5">
+          <span className="text-[10px] font-[600] tracking-[0.5px] uppercase text-white bg-[#005BAC] px-1.5 py-0.5 rounded-[4px]">VINA</span>
+          <SimTypeBadge type={sim.type} className="text-[10px] px-1.5 py-0.5 rounded-[4px] tracking-[0.3px]" />
         </div>
+      </td>
 
-        <div className="flex flex-col items-center justify-center h-14 mb-4">
+      {/* Cột 3: Giá tiền */}
+      <td className="py-3.5 px-4 whitespace-nowrap">
+        <div className="flex flex-col">
           <div className="text-price">{formatPrice(sim.price)}</div>
           {isSale && (
             <div className="text-price-old">{formatPrice(sim.priceOriginal!)}</div>
           )}
         </div>
+      </td>
 
+      {/* Cột 4: Đặt mua */}
+      <td className="py-3.5 px-4 whitespace-nowrap text-right">
         <Link 
           href={`/checkout?phone=${sim.phone}`}
-          className="flex w-full bg-[var(--blue-500)] text-white py-[8px] px-[18px] rounded-[8px] font-sans text-[13px] font-[700] tracking-[0.3px] hover:bg-[var(--blue-600)] transition items-center justify-center gap-2"
+          className="inline-flex items-center gap-1.5 bg-[#005BAC] text-white px-3.5 py-2 rounded-[6px] font-sans text-[12px] font-[600] hover:bg-[#004A8F] transition shadow-sm"
         >
-          <ShoppingCart size={18} /> Đặt mua ngay
+          <ShoppingCart size={14} /> Mua
         </Link>
-      </div>
-    </div>
+      </td>
+    </tr>
   );
 }

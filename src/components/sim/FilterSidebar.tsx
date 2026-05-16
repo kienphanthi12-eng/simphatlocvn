@@ -32,8 +32,6 @@ export function FilterSidebar() {
     }
 
     const prefixQuery = searchParams.get("search")
-    // Assuming search represents prefix in this specific sidebar context if it's comma separated, 
-    // but the API supports search as generic text. We'll use search for prefix syncing for now.
     if (prefixQuery) {
       setSelectedPrefixes(prefixQuery.split(","))
     } else {
@@ -75,14 +73,21 @@ export function FilterSidebar() {
     else current.add(prefix)
     
     const newValue = Array.from(current).join(",")
-    updateUrl({ search: newValue || null }) // use search param to filter by prefix in API
+    updateUrl({ search: newValue || null }) 
   }
 
   const handlePriceRangeClick = (min: number, max: number | null) => {
-    updateUrl({
-      minPrice: min.toString(),
-      maxPrice: max ? max.toString() : null
-    })
+    const minStr = min.toString()
+    const maxStr = max ? max.toString() : ""
+    
+    if (minPrice === minStr && maxPrice === maxStr) {
+      updateUrl({ minPrice: null, maxPrice: null })
+    } else {
+      updateUrl({
+        minPrice: minStr,
+        maxPrice: maxStr || null
+      })
+    }
   }
 
   const handleCustomPriceSubmit = (e: React.FormEvent) => {
@@ -98,57 +103,65 @@ export function FilterSidebar() {
   }
 
   return (
-    <div className="bg-white p-5 rounded-xl border border-gray-200">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-[11px] font-[700] tracking-[1px] uppercase text-[var(--gray-400)]">Bộ lọc tìm kiếm</h2>
+    <div className="bg-white p-5 rounded-[8px] border border-[#E2E8F0]">
+      <div className="flex items-center justify-between mb-6 pb-4 border-b border-[#F1F5F9]">
+        <h2 className="text-[11px] font-[700] tracking-[1px] uppercase text-[#94A3B8]">Bộ lọc tìm kiếm</h2>
         <button 
           onClick={handleClearFilters}
-          className="text-sm text-red-500 hover:underline"
+          className="text-[11px] uppercase text-red-500 hover:text-red-600 font-[600]"
         >
           Xoá lọc
         </button>
       </div>
 
       {/* Khoảng giá */}
-      <div className="mb-6">
-        <h3 className="text-[11px] font-[700] tracking-[1px] uppercase text-[var(--gray-400)] mb-3">Khoảng giá</h3>
-        <div className="space-y-2 mb-3">
-          {priceRanges.map((range, idx) => (
-            <button
-              key={idx}
-              onClick={() => handlePriceRangeClick(range.min, range.max)}
-              className="block w-full text-left text-[13.5px] font-[500] text-[var(--gray-700)] py-1.5 px-3 rounded hover:bg-[var(--gray-100)] transition"
-            >
-              {range.label}
-            </button>
-          ))}
+      <div className="mb-8">
+        <h3 className="text-[11px] font-[700] tracking-[1px] uppercase text-[#94A3B8] mb-3">Khoảng giá</h3>
+        <div className="grid grid-cols-2 gap-2 mb-3">
+          {priceRanges.map((range, idx) => {
+            const minStr = range.min.toString()
+            const maxStr = range.max ? range.max.toString() : ""
+            const isSelected = minPrice === minStr && maxPrice === maxStr
+
+            return (
+              <button
+                key={idx}
+                onClick={() => handlePriceRangeClick(range.min, range.max)}
+                className={`text-center text-[12px] font-[500] py-2 px-1 rounded-[6px] border transition ${
+                  isSelected ? "border-[#005BAC] text-[#005BAC] bg-blue-50" : "border-[#E2E8F0] text-[#475569] hover:border-[#CBD5E1]"
+                }`}
+              >
+                {range.label}
+              </button>
+            )
+          })}
         </div>
         
-        <form onSubmit={handleCustomPriceSubmit} className="flex items-center gap-2">
+        <form onSubmit={handleCustomPriceSubmit} className="flex items-center gap-2 mt-4">
           <input 
             type="number" 
             placeholder="Từ" 
-            className="w-full text-sm border rounded px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-[#0066CC]"
+            className="w-full text-[12px] border border-[#E2E8F0] rounded-[6px] px-2.5 py-1.5 focus:outline-none focus:border-[#005BAC]"
             value={minPrice}
             onChange={(e) => setMinPrice(e.target.value)}
           />
-          <span className="text-gray-400">-</span>
+          <span className="text-[#94A3B8]">-</span>
           <input 
             type="number" 
             placeholder="Đến" 
-            className="w-full text-sm border rounded px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-[#0066CC]"
+            className="w-full text-[12px] border border-[#E2E8F0] rounded-[6px] px-2.5 py-1.5 focus:outline-none focus:border-[#005BAC]"
             value={maxPrice}
             onChange={(e) => setMaxPrice(e.target.value)}
           />
-          <button type="submit" className="bg-gray-100 px-3 py-1.5 rounded hover:bg-gray-200 text-sm font-medium">
+          <button type="submit" className="bg-[#F1F5F9] px-3 py-1.5 rounded-[6px] text-[#475569] hover:bg-[#E2E8F0] text-[12px] font-[600] transition">
             Lọc
           </button>
         </form>
       </div>
 
       {/* Đầu số */}
-      <div className="mb-6">
-        <h3 className="text-[11px] font-[700] tracking-[1px] uppercase text-[var(--gray-400)] mb-3">Đầu số</h3>
+      <div className="mb-8">
+        <h3 className="text-[11px] font-[700] tracking-[1px] uppercase text-[#94A3B8] mb-3">Đầu số</h3>
         <div className="grid grid-cols-3 gap-2">
           {prefixes.map((prefix) => {
             const isSelected = selectedPrefixes.includes(prefix)
@@ -156,8 +169,8 @@ export function FilterSidebar() {
               <button
                 key={prefix}
                 onClick={() => handlePrefixToggle(prefix)}
-                className={`text-[13.5px] font-[500] py-1.5 border rounded transition ${
-                  isSelected ? "bg-[#0066CC] text-white border-[#0066CC]" : "bg-white text-gray-700 hover:bg-gray-50 border-gray-200"
+                className={`text-[12px] font-[500] py-1.5 border rounded-[6px] transition ${
+                  isSelected ? "bg-[#005BAC] text-white border-[#005BAC]" : "bg-white text-[#475569] hover:border-[#CBD5E1] border-[#E2E8F0]"
                 }`}
               >
                 {prefix}
@@ -169,8 +182,8 @@ export function FilterSidebar() {
 
       {/* Loại Sim */}
       <div>
-        <h3 className="text-[11px] font-[700] tracking-[1px] uppercase text-[var(--gray-400)] mb-3">Loại Sim</h3>
-        <div className="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+        <h3 className="text-[11px] font-[700] tracking-[1px] uppercase text-[#94A3B8] mb-3">Loại Sim</h3>
+        <div className="space-y-3 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
           {simTypes.map((type) => {
             const isSelected = selectedTypes.includes(type)
             return (
@@ -179,9 +192,9 @@ export function FilterSidebar() {
                   type="checkbox" 
                   checked={isSelected}
                   onChange={() => handleTypeToggle(type)}
-                  className="w-4 h-4 rounded border-gray-300 text-[#0066CC] focus:ring-[#0066CC]"
+                  className="w-4 h-4 rounded border-[#CBD5E1] text-[#005BAC] focus:ring-[#005BAC]"
                 />
-                <span className="text-[13.5px] font-[500] text-[var(--gray-700)] group-hover:text-[var(--blue-500)] transition">
+                <span className="text-[13.5px] font-[500] text-[#334155] group-hover:text-[#005BAC] transition">
                   {getSimTypeLabel(type)}
                 </span>
               </label>
