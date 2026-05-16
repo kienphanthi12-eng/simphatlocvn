@@ -35,14 +35,15 @@ export default async function SimDetailPage({ params }: Props) {
   }
 
   // Get related sims
-  const relatedSims = await prisma.sim.findMany({
+  const allRelatedSims = await prisma.sim.findMany({
     where: {
-      type: sim.type,
-      status: 'AVAILABLE',
       id: { not: sim.id }
-    },
-    take: 5
+    }
   })
+  
+  const relatedSims = allRelatedSims
+    .filter(s => s.type === sim.type && s.status === 'AVAILABLE')
+    .slice(0, 5)
 
   // Phong thủy đơn giản
   const totalScore = sim.phone.split('').reduce((sum, char) => sum + parseInt(char), 0) % 10
