@@ -2,12 +2,9 @@
 
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { orderSchema } from "@/lib/validations"
 import { PaymentMethod } from "@prisma/client"
 import { useRouter } from "next/navigation"
 import { Loader2 } from "lucide-react"
-import { z } from "zod"
 
 interface CheckoutFormProps {
   sim: { id: string, phone: string }
@@ -34,10 +31,14 @@ export default function CheckoutFormClient({ sim }: CheckoutFormProps) {
     watch,
     formState: { errors },
   } = useForm<OrderFormValues>({
-    resolver: zodResolver(orderSchema),
     defaultValues: {
       isPickup: false,
-      paymentMethod: PaymentMethod.COD,
+      paymentMethod: 'COD',
+      customerName: '',
+      customerPhone: '',
+      customerAddress: '',
+      pickupNote: '',
+      note: '',
     },
   })
 
