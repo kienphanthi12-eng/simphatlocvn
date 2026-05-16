@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("Admin Auth Error:", error);
     if (error instanceof z.ZodError) {
-      return NextResponse.json({ error: "Dữ liệu không hợp lệ", details: error instanceof ZodError ? error.errors : error.message }, { status: 400 });
+      return NextResponse.json({ error: "Dữ liệu không hợp lệ", details: error.issues }, { status: 400 });
     }
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
