@@ -117,7 +117,7 @@ export default async function SimDetailPage({ params }: Props) {
                 {isAvailable ? (
                   <Link 
                     href={`/checkout?phone=${sim.phone}`}
-                    className="flex-1 bg-[#0066CC] text-white py-3.5 rounded-xl font-bold hover:bg-blue-700 transition flex items-center justify-center gap-2 shadow-md shadow-blue-200"
+                    className="flex-1 flex items-center justify-center gap-2 bg-[var(--blue-500)] text-white px-[18px] py-[8px] rounded-[8px] font-sans text-[13px] font-[700] tracking-[0.3px] hover:bg-[var(--blue-600)] transition shadow-sm"
                   >
                     🛒 Đặt mua ngay
                   </Link>
@@ -130,7 +130,7 @@ export default async function SimDetailPage({ params }: Props) {
                   href="https://zalo.me/0914123456" 
                   target="_blank"
                   rel="noreferrer"
-                  className="flex-1 border-2 border-[#0066CC] text-[#0066CC] py-3.5 rounded-xl font-bold hover:bg-blue-50 transition flex items-center justify-center gap-2"
+                  className="flex-1 border border-[var(--blue-500)] text-[var(--blue-500)] px-[18px] py-[8px] rounded-[8px] text-[14px] font-[600] tracking-[0.2px] hover:bg-[var(--blue-50)] transition flex items-center justify-center gap-2"
                 >
                   <MessageCircle size={20} /> Zalo tư vấn
                 </a>

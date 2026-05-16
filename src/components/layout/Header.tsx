@@ -31,8 +31,8 @@ export default function Header() {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link href="/" className="flex flex-col items-start">
-            <span className="text-2xl font-bold text-[#0066CC]">Sim Phát Lộc</span>
-            <span className="text-xs font-semibold bg-[#0066CC] text-white px-2 py-0.5 rounded-full mt-1">
+            <span className="text-[26px] font-[800] tracking-tight"><span className="text-[var(--blue-500)]">Sim</span> <span className="text-[var(--gray-900)]">Phát Lộc</span></span>
+            <span className="text-[11px] font-[400] text-[var(--gray-500)] tracking-[1px] uppercase mt-1">
               Chuyên Vinaphone
             </span>
           </Link>
@@ -61,7 +61,7 @@ export default function Header() {
             <div className="flex items-center gap-4">
               <div className="text-right">
                 <p className="text-sm text-gray-500 font-medium">Hotline tư vấn</p>
-                <p className="text-lg font-bold text-[#0066CC]">0914 123 456</p>
+                <p style={{ fontFamily: 'var(--font-display)' }} className="text-[22px] font-[800] tracking-[0.5px] text-[var(--blue-500)]">0914 123 456</p>
               </div>
               <a 
                 href="https://zalo.me/0914123456" 
@@ -89,7 +89,7 @@ export default function Header() {
             <Link 
               key={link.name} 
               href={link.href}
-              className="font-medium text-gray-700 hover:text-[#0066CC] transition"
+              className="text-[13.5px] font-[500] text-[var(--gray-600)] hover:text-[var(--blue-500)] hover:font-[700] transition"
             >
               {link.name}
             </Link>

@@ -22,7 +22,7 @@ export function SimTypeBadge({ type, className, ...props }: BadgeProps) {
   return (
     <span
       className={cn(
-        "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border",
+        "inline-flex items-center text-[11px] font-[700] tracking-[0.4px] px-[9px] py-[3px] rounded-[5px] border",
         colorClass,
         className
       )}

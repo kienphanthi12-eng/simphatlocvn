@@ -1,15 +1,23 @@
 import type { Metadata } from "next";
-import { Be_Vietnam_Pro } from "next/font/google";
+import { Lexend, Barlow_Condensed } from 'next/font/google'
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { ZaloButton } from "@/components/ui/ZaloButton";
 
-const beVietnamPro = Be_Vietnam_Pro({
-  weight: ["300", "400", "500", "600", "700"],
-  subsets: ["latin", "vietnamese"],
-  variable: "--font-be-vietnam-pro",
-});
+const lexend = Lexend({
+  subsets: ['latin', 'vietnamese'],
+  weight: ['300', '400', '500', '600', '700', '800'],
+  variable: '--font-sans',
+  display: 'swap',
+})
+
+const barlow = Barlow_Condensed({
+  subsets: ['latin'],
+  weight: ['500', '600', '700', '800'],
+  variable: '--font-display',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: "Sim Phát Lộc | Chuyên Sim Vinaphone Số Đẹp",
@@ -23,7 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi">
-      <body className={`${beVietnamPro.variable} font-sans antialiased bg-gray-50 flex flex-col min-h-screen`}>
+      <body className={`${lexend.variable} ${barlow.variable} font-sans antialiased bg-gray-50 flex flex-col min-h-screen`}>
         <Header />
         <main className="flex-grow">
           {children}

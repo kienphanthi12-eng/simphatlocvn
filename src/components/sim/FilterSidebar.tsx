@@ -100,7 +100,7 @@ export function FilterSidebar() {
   return (
     <div className="bg-white p-5 rounded-xl border border-gray-200">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-lg font-bold text-gray-900">Bộ lọc tìm kiếm</h2>
+        <h2 className="text-[11px] font-[700] tracking-[1px] uppercase text-[var(--gray-400)]">Bộ lọc tìm kiếm</h2>
         <button 
           onClick={handleClearFilters}
           className="text-sm text-red-500 hover:underline"
@@ -111,13 +111,13 @@ export function FilterSidebar() {
 
       {/* Khoảng giá */}
       <div className="mb-6">
-        <h3 className="font-semibold text-gray-900 mb-3">Khoảng giá</h3>
+        <h3 className="text-[11px] font-[700] tracking-[1px] uppercase text-[var(--gray-400)] mb-3">Khoảng giá</h3>
         <div className="space-y-2 mb-3">
           {priceRanges.map((range, idx) => (
             <button
               key={idx}
               onClick={() => handlePriceRangeClick(range.min, range.max)}
-              className="block w-full text-left text-sm py-1.5 px-3 rounded hover:bg-gray-100 text-gray-700 transition"
+              className="block w-full text-left text-[13.5px] font-[500] text-[var(--gray-700)] py-1.5 px-3 rounded hover:bg-[var(--gray-100)] transition"
             >
               {range.label}
             </button>
@@ -148,7 +148,7 @@ export function FilterSidebar() {
 
       {/* Đầu số */}
       <div className="mb-6">
-        <h3 className="font-semibold text-gray-900 mb-3">Đầu số</h3>
+        <h3 className="text-[11px] font-[700] tracking-[1px] uppercase text-[var(--gray-400)] mb-3">Đầu số</h3>
         <div className="grid grid-cols-3 gap-2">
           {prefixes.map((prefix) => {
             const isSelected = selectedPrefixes.includes(prefix)
@@ -156,7 +156,7 @@ export function FilterSidebar() {
               <button
                 key={prefix}
                 onClick={() => handlePrefixToggle(prefix)}
-                className={`text-sm py-1.5 border rounded transition font-medium ${
+                className={`text-[13.5px] font-[500] py-1.5 border rounded transition ${
                   isSelected ? "bg-[#0066CC] text-white border-[#0066CC]" : "bg-white text-gray-700 hover:bg-gray-50 border-gray-200"
                 }`}
               >
@@ -169,7 +169,7 @@ export function FilterSidebar() {
 
       {/* Loại Sim */}
       <div>
-        <h3 className="font-semibold text-gray-900 mb-3">Loại Sim</h3>
+        <h3 className="text-[11px] font-[700] tracking-[1px] uppercase text-[var(--gray-400)] mb-3">Loại Sim</h3>
         <div className="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
           {simTypes.map((type) => {
             const isSelected = selectedTypes.includes(type)
@@ -181,7 +181,7 @@ export function FilterSidebar() {
                   onChange={() => handleTypeToggle(type)}
                   className="w-4 h-4 rounded border-gray-300 text-[#0066CC] focus:ring-[#0066CC]"
                 />
-                <span className="text-sm text-gray-700 group-hover:text-[#0066CC] transition">
+                <span className="text-[13.5px] font-[500] text-[var(--gray-700)] group-hover:text-[var(--blue-500)] transition">
                   {getSimTypeLabel(type)}
                 </span>
               </label>

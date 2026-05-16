@@ -16,7 +16,7 @@ export function OrderButton({ sim }: OrderButtonProps) {
     <>
       <button 
         onClick={() => setIsModalOpen(true)}
-        className="flex-1 bg-[#0066CC] text-white py-3.5 rounded-xl font-bold hover:bg-blue-700 transition flex items-center justify-center gap-2 shadow-md shadow-blue-200"
+        className="flex-1 flex justify-center items-center gap-2 bg-[var(--blue-500)] text-white px-[18px] py-[8px] rounded-[8px] font-sans text-[13px] font-[700] tracking-[0.3px] hover:bg-[var(--blue-600)] transition shadow-sm"
       >
         <ShoppingCart size={20} /> Đặt mua ngay
       </button>
