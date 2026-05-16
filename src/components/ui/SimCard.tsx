@@ -41,10 +41,9 @@ export function SimCard({ sim }: SimCardProps) {
       {/* Loại sim */}
       <TableCell>
         <Badge
-          variant="outline"
           className={`text-[10px] font-semibold border ${badgeColor}`}
         >
-          {getSimTypeLabel(sim.type)}
+          {sim.type}
         </Badge>
       </TableCell>
 
