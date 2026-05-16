@@ -2,7 +2,7 @@ import { Sim } from "@prisma/client";
 import { formatPhone, formatPrice, getSimTypeLabel } from "@/lib/utils";
 import Link from "next/link";
 import { TableRow, TableCell } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/components/ui/Badge";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 

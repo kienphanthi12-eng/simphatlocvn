@@ -5,7 +5,7 @@ import { Metadata } from "next"
 import Link from "next/link"
 import { CheckCircle, XCircle, MessageCircle, Info } from "lucide-react"
 import { SimCard } from "@/components/ui/SimCard"
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@/components/ui/Badge"
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 interface Props {
