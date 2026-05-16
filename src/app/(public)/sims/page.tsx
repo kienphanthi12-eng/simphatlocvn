@@ -4,6 +4,12 @@ import prisma from "@/lib/db"
 import { Prisma } from "@prisma/client"
 import Link from "next/link"
 import { Suspense } from "react"
+import { Card, CardContent } from "@/components/ui/card"
+import { Table, TableBody } from "@/components/ui/table"
+import { SortSelect } from "@/components/sim/SortSelect"
+import { Button, buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+import { SearchX } from "lucide-react"
 
 interface SearchParams {
   page?: string
@@ -79,90 +85,90 @@ export default async function SimsPage({ searchParams }: { searchParams: Promise
   }
 
   return (
-    <div className="bg-[#F8FAFC] min-h-screen py-8">
-      <div className="container mx-auto px-4">
-        
-        {/* Breadcrumb & Header */}
-        <div className="mb-8">
-          <h1 className="text-[28px] font-[800] tracking-tight text-[#0F172A]">Danh Sách Sim Vinaphone</h1>
-          <p className="text-[14px] text-[#64748B] mt-1">Đang hiển thị {total} sim số đẹp phù hợp</p>
+    <div className="min-h-screen bg-background py-5">
+      <div className="mx-auto flex max-w-7xl gap-5 px-4">
+
+        {/* Sidebar */}
+        <div className="hidden lg:block shrink-0">
+          <Suspense fallback={<div className="w-[230px] min-h-[400px] rounded-lg border border-border bg-card p-4 animate-pulse" />}>
+            <FilterSidebar />
+          </Suspense>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Sidebar */}
-          <div className="w-full lg:w-[230px] shrink-0">
-            <Suspense fallback={<div className="bg-white p-5 rounded-[8px] border border-[#E2E8F0] min-h-[400px]">Đang tải bộ lọc...</div>}>
-              <FilterSidebar />
-            </Suspense>
-          </div>
+        {/* Main Content */}
+        <main className="min-w-0 flex-1 space-y-5">
 
-          {/* Main Content */}
-          <div className="flex-1">
-            {/* Toolbar */}
-            <div className="bg-white p-4 rounded-[8px] border border-[#E2E8F0] flex flex-wrap items-center justify-between gap-4 mb-6 shadow-sm">
-              <div className="flex items-center gap-2">
-                <span className="text-[13px] font-[500] text-[#64748B] mr-2">Sắp xếp:</span>
-                <Link href={buildUrl({ sort: null, page: "1" })} className={`text-[13px] font-[500] px-3.5 py-1.5 rounded-full transition ${!params.sort || params.sort === 'newest' ? 'bg-[#005BAC] text-white' : 'bg-[#F1F5F9] text-[#334155] hover:bg-[#E2E8F0]'}`}>Mới nhất</Link>
-                <Link href={buildUrl({ sort: "price_asc", page: "1" })} className={`text-[13px] font-[500] px-3.5 py-1.5 rounded-full transition ${params.sort === 'price_asc' ? 'bg-[#005BAC] text-white' : 'bg-[#F1F5F9] text-[#334155] hover:bg-[#E2E8F0]'}`}>Giá tăng dần</Link>
-                <Link href={buildUrl({ sort: "price_desc", page: "1" })} className={`text-[13px] font-[500] px-3.5 py-1.5 rounded-full transition ${params.sort === 'price_desc' ? 'bg-[#005BAC] text-white' : 'bg-[#F1F5F9] text-[#334155] hover:bg-[#E2E8F0]'}`}>Giá giảm dần</Link>
-              </div>
+          {/* Toolbar */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-lg border border-border bg-card p-3">
+            <div className="text-sm text-muted-foreground font-medium px-2">
+              Tìm thấy <span className="font-bold text-foreground">{total}</span> sim Vinaphone phù hợp
             </div>
-
-            {/* Results */}
-            {sims.length === 0 ? (
-              <div className="bg-white p-12 text-center rounded-[8px] border border-[#E2E8F0] shadow-sm">
-                <div className="text-5xl mb-4">🔍</div>
-                <h3 className="text-[18px] font-[700] text-[#0F172A] mb-2">Không tìm thấy sim nào</h3>
-                <p className="text-[14px] text-[#64748B]">Thử thay đổi bộ lọc hoặc tìm với từ khóa khác.</p>
-                <Link href="/sims" className="mt-4 inline-block text-[13.5px] text-[#005BAC] font-[600] hover:underline">
-                  Xóa tất cả bộ lọc
-                </Link>
-              </div>
-            ) : (
-              <>
-                <div className="bg-white rounded-[8px] border border-[#E2E8F0] overflow-hidden shadow-sm">
-                  <table className="w-full text-left border-collapse">
-                    <thead className="bg-[#EBF4FF] text-[#005BAC] text-[11px] font-[700] uppercase tracking-[1px] border-b border-[#DBEAFE]">
-                      <tr>
-                        <th className="py-3 px-4 font-semibold">Số điện thoại</th>
-                        <th className="py-3 px-4 font-semibold">Phân loại</th>
-                        <th className="py-3 px-4 font-semibold">Giá bán</th>
-                        <th className="py-3 px-4 font-semibold text-right">Thao tác</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {sims.map((sim) => (
-                        <SimCard key={sim.id} sim={sim} />
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-
-                {/* Pagination */}
-                {totalPages > 1 && (
-                  <div className="flex justify-center items-center gap-2 mt-10">
-                    {page > 1 && (
-                      <Link href={buildUrl({ page: (page - 1).toString() })} className="px-4 py-2 border border-[#E2E8F0] rounded-[8px] bg-white hover:bg-[#F8FAFC] text-[13.5px] font-[500] text-[#334155] transition">
-                        &larr; Trước
-                      </Link>
-                    )}
-                    
-                    <span className="px-4 py-2 text-[#475569] text-[13.5px] font-[500]">
-                      Trang {page} / {totalPages}
-                    </span>
-
-                    {page < totalPages && (
-                      <Link href={buildUrl({ page: (page + 1).toString() })} className="px-4 py-2 border border-[#E2E8F0] rounded-[8px] bg-white hover:bg-[#F8FAFC] text-[13.5px] font-[500] text-[#334155] transition">
-                        Sau &rarr;
-                      </Link>
-                    )}
-                  </div>
-                )}
-              </>
-            )}
-
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-muted-foreground">Sắp xếp:</span>
+              <Suspense fallback={<div className="w-[180px] h-9 bg-muted rounded animate-pulse" />}>
+                <SortSelect />
+              </Suspense>
+            </div>
           </div>
-        </div>
+
+          {/* Results */}
+          {sims.length === 0 ? (
+            <Card className="p-12 text-center shadow-sm">
+              <div className="flex justify-center mb-4 text-muted-foreground/30">
+                <SearchX size={64} />
+              </div>
+              <h3 className="text-lg font-bold text-foreground mb-2">Không tìm thấy sim nào</h3>
+              <p className="text-sm text-muted-foreground mb-6">Thử thay đổi bộ lọc hoặc tìm với từ khóa khác.</p>
+              <Link href="/sims" className={cn(buttonVariants({ variant: 'outline' }))}>
+                Xóa tất cả bộ lọc
+              </Link>
+            </Card>
+          ) : (
+            <Card className="shadow-sm overflow-hidden">
+              <CardContent className="p-0">
+                <div className="grid grid-cols-[1fr_130px_150px_110px] items-center border-b border-border bg-muted/50 px-4 py-2.5 text-xs font-semibold text-muted-foreground">
+                  <span>Số điện thoại</span>
+                  <span>Loại sim</span>
+                  <span className="text-right">Giá bán</span>
+                  <span className="text-center">Thao tác</span>
+                </div>
+                <Table>
+                  <TableBody>
+                    {sims.map((sim) => (
+                      <SimCard key={sim.id} sim={sim} />
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Pagination */}
+          {totalPages > 1 && sims.length > 0 && (
+            <div className="flex justify-center items-center gap-4 pt-2">
+              {page > 1 ? (
+                <Link href={buildUrl({ page: (page - 1).toString() })} className={cn(buttonVariants({ variant: 'outline' }))}>
+                  Trang trước
+                </Link>
+              ) : (
+                <Button variant="outline" disabled>Trang trước</Button>
+              )}
+
+              <span className="text-sm font-medium text-muted-foreground">
+                Trang {page} / {totalPages}
+              </span>
+
+              {page < totalPages ? (
+                <Link href={buildUrl({ page: (page + 1).toString() })} className={cn(buttonVariants({ variant: 'outline' }))}>
+                  Trang sau
+                </Link>
+              ) : (
+                <Button variant="outline" disabled>Trang sau</Button>
+              )}
+            </div>
+          )}
+
+        </main>
       </div>
     </div>
   )

@@ -1,16 +1,12 @@
 import type { Metadata } from "next";
-import { Lexend, Barlow_Condensed } from 'next/font/google'
+import { Lexend, Barlow_Condensed, Geist } from 'next/font/google'
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { ZaloButton } from "@/components/ui/ZaloButton";
+import { cn } from "@/lib/utils";
 
-const lexend = Lexend({
-  subsets: ['latin', 'vietnamese'],
-  weight: ['300', '400', '500', '600', '700', '800'],
-  variable: '--font-sans',
-  display: 'swap',
-})
+const geist = Geist({subsets:['latin'],variable:'--font-sans'})
 
 const barlow = Barlow_Condensed({
   subsets: ['latin'],
@@ -30,8 +26,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi">
-      <body className={`${lexend.variable} ${barlow.variable} font-sans antialiased bg-gray-50 flex flex-col min-h-screen`}>
+    <html lang="vi" className={cn("font-sans", geist.variable)}>
+      <body className={`${geist.variable} ${barlow.variable} font-sans antialiased bg-gray-50 flex flex-col min-h-screen`}>
         <Header />
         <main className="flex-grow">
           {children}

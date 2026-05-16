@@ -1,53 +1,79 @@
 import { Sim } from "@prisma/client";
-import { formatPhone, formatPrice } from "@/lib/utils";
-import { SimTypeBadge } from "./Badge";
+import { formatPhone, formatPrice, getSimTypeLabel } from "@/lib/utils";
 import Link from "next/link";
-import { ShoppingCart } from "lucide-react";
+import { TableRow, TableCell } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface SimCardProps {
   sim: Pick<Sim, "id" | "phone" | "type" | "price" | "priceOriginal" | "featured">;
+  view?: string;
+}
+
+const typeColorMap: Record<string, string> = {
+  TAM_HOA: "bg-orange-100 text-orange-700 border-orange-200",
+  TU_QUY: "bg-red-100 text-red-700 border-red-200",
+  TIEN_LEN: "bg-green-100 text-green-700 border-green-200",
+  LOC_PHAT: "bg-yellow-100 text-yellow-700 border-yellow-200",
+  THAN_TAI: "bg-purple-100 text-purple-700 border-purple-200",
+  ONG_DIA: "bg-indigo-100 text-indigo-700 border-indigo-200",
+  SO_GANH: "bg-teal-100 text-teal-700 border-teal-200",
+  NAM_SINH: "bg-blue-100 text-blue-700 border-blue-200",
+  VIP: "bg-rose-100 text-rose-700 border-rose-200",
 }
 
 export function SimCard({ sim }: SimCardProps) {
   const isSale = sim.priceOriginal && sim.priceOriginal > sim.price;
+  const badgeColor = typeColorMap[sim.type] ?? "bg-primary/10 text-primary border-primary/20";
 
   return (
-    <tr className="hover:bg-[#F7FAFF] border-b border-[#E2E8F0] group transition-colors">
-      {/* Cột 1: Số điện thoại */}
-      <td className="py-3.5 px-4 whitespace-nowrap">
+    <TableRow className="group border-b border-border transition-colors last:border-b-0 hover:bg-primary/5 cursor-pointer">
+      {/* Số điện thoại */}
+      <TableCell className="py-3">
         <Link href={`/sims/${sim.phone}`} className="block">
-          <div className="text-phone text-[20px] group-hover:text-[#005BAC] transition-colors">{formatPhone(sim.phone)}</div>
-          <div className="text-[11px] text-[#64748B] mt-0.5">Vinaphone</div>
+          <span className="font-mono text-base font-bold tracking-wide text-foreground group-hover:text-primary transition-colors" style={{ fontFamily: 'var(--font-display)' }}>
+            {formatPhone(sim.phone)}
+          </span>
         </Link>
-      </td>
-      
-      {/* Cột 2: Badges */}
-      <td className="py-3.5 px-4 whitespace-nowrap">
-        <div className="flex flex-col items-start gap-1.5">
-          <span className="text-[10px] font-[600] tracking-[0.5px] uppercase text-white bg-[#005BAC] px-1.5 py-0.5 rounded-[4px]">VINA</span>
-          <SimTypeBadge type={sim.type} className="text-[10px] px-1.5 py-0.5 rounded-[4px] tracking-[0.3px]" />
-        </div>
-      </td>
+      </TableCell>
 
-      {/* Cột 3: Giá tiền */}
-      <td className="py-3.5 px-4 whitespace-nowrap">
+      {/* Loại sim */}
+      <TableCell>
+        <Badge
+          variant="outline"
+          className={`text-[10px] font-semibold border ${badgeColor}`}
+        >
+          {getSimTypeLabel(sim.type)}
+        </Badge>
+      </TableCell>
+
+      {/* Giá tiền */}
+      <TableCell>
         <div className="flex flex-col">
-          <div className="text-price">{formatPrice(sim.price)}</div>
+          <span className="text-sm font-bold text-primary">
+            {formatPrice(sim.price)}
+          </span>
           {isSale && (
-            <div className="text-price-old">{formatPrice(sim.priceOriginal!)}</div>
+            <span className="text-xs text-muted-foreground line-through">
+              {formatPrice(sim.priceOriginal!)}
+            </span>
           )}
         </div>
-      </td>
+      </TableCell>
 
-      {/* Cột 4: Đặt mua */}
-      <td className="py-3.5 px-4 whitespace-nowrap text-right">
-        <Link 
+      {/* Đặt mua */}
+      <TableCell className="text-center w-[110px]">
+        <Link
           href={`/checkout?phone=${sim.phone}`}
-          className="inline-flex items-center gap-1.5 bg-[#005BAC] text-white px-3.5 py-2 rounded-[6px] font-sans text-[12px] font-[600] hover:bg-[#004A8F] transition shadow-sm"
+          className={cn(
+            buttonVariants({ size: 'sm' }),
+            'h-7 bg-primary px-3 text-xs font-semibold text-primary-foreground hover:bg-primary/90'
+          )}
         >
-          <ShoppingCart size={14} /> Mua
+          Đặt mua
         </Link>
-      </td>
-    </tr>
+      </TableCell>
+    </TableRow>
   );
 }

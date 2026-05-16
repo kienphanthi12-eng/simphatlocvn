@@ -5,8 +5,8 @@ import { Metadata } from "next"
 import Link from "next/link"
 import { CheckCircle, XCircle, MessageCircle, Info } from "lucide-react"
 import { SimCard } from "@/components/ui/SimCard"
-import { SimTypeBadge } from "@/components/ui/Badge"
-import { OrderButton } from "@/components/sim/OrderButton"
+import { Badge } from "@/components/ui/badge"
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 interface Props {
   params: Promise<{ phone: string }>
@@ -88,8 +88,8 @@ export default async function SimDetailPage({ params }: Props) {
             {/* Left: Sim Display */}
             <div className="p-8 md:p-12 md:w-3/5 flex flex-col justify-center items-center md:items-start border-b md:border-b-0 md:border-r border-gray-100 bg-gradient-to-br from-white to-blue-50/50">
               <div className="flex items-center gap-2 mb-6">
-                <span className="text-xs font-bold text-white bg-[#0066CC] px-2 py-1 rounded">VINAPHONE</span>
-                <SimTypeBadge type={sim.type} />
+                <span className="text-xs font-bold text-white bg-brand px-2 py-1 rounded">VINAPHONE</span>
+                <Badge variant="outline">{getSimTypeLabel(sim.type)}</Badge>
               </div>
               
               <h1 className="text-5xl md:text-6xl font-black text-[#0066CC] tracking-widest mb-6">
@@ -176,10 +176,22 @@ export default async function SimDetailPage({ params }: Props) {
         {relatedSims.length > 0 && (
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Sim Vinaphone tương tự</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-              {relatedSims.map(s => (
-                <SimCard key={s.id} sim={s} view="grid" />
-              ))}
+            <div className="bg-white rounded-lg border shadow-sm overflow-hidden">
+              <Table>
+                <TableHeader className="bg-brand-light">
+                  <TableRow className="hover:bg-brand-light border-b-blue-100">
+                    <TableHead className="text-brand font-bold uppercase text-[10px] tracking-wider w-[180px]">Số điện thoại</TableHead>
+                    <TableHead className="text-brand font-bold uppercase text-[10px] tracking-wider">Phân loại</TableHead>
+                    <TableHead className="text-brand font-bold uppercase text-[10px] tracking-wider">Giá bán</TableHead>
+                    <TableHead className="text-brand font-bold uppercase text-[10px] tracking-wider w-[120px] text-center">Thao tác</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {relatedSims.map(s => (
+                    <SimCard key={s.id} sim={s} />
+                  ))}
+                </TableBody>
+              </Table>
             </div>
           </div>
         )}

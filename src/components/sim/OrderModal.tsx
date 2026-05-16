@@ -1,14 +1,21 @@
 "use client"
 
 import { useState } from "react"
-import { useForm } from "react-hook-form"
+import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { orderSchema } from "@/lib/validations"
 import { formatPhone, formatPrice, getSimTypeLabel } from "@/lib/utils"
 import { Sim, PaymentMethod } from "@prisma/client"
 import { useRouter } from "next/navigation"
-import { X, Loader2 } from "lucide-react"
+import { Loader2 } from "lucide-react"
 import { z } from "zod"
+
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Checkbox } from "@/components/ui/checkbox"
 
 interface OrderModalProps {
   sim: Pick<Sim, "id" | "phone" | "type" | "price">
@@ -27,6 +34,8 @@ export function OrderModal({ sim, isOpen, onClose }: OrderModalProps) {
     register,
     handleSubmit,
     watch,
+    control,
+    setValue,
     formState: { errors },
   } = useForm<OrderFormValues>({
     resolver: zodResolver(orderSchema),
@@ -71,146 +80,134 @@ export function OrderModal({ sim, isOpen, onClose }: OrderModalProps) {
     }
   }
 
-  if (!isOpen) return null
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]">
-        
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b">
-          <h2 className="text-xl font-bold text-gray-900">Đặt Mua Sim</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition">
-            <X size={24} />
-          </button>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto custom-scrollbar">
+        <DialogHeader>
+          <DialogTitle className="text-xl">Đặt Mua Sim</DialogTitle>
+        </DialogHeader>
+
+        {/* Sim Info Summary */}
+        <div className="bg-brand-light border border-blue-100 rounded-xl p-4 my-2 text-center">
+          <div className="text-3xl font-black text-brand tracking-wider mb-2 font-mono">
+            {formatPhone(sim.phone)}
+          </div>
+          <div className="text-sm text-gray-600 mb-2">
+            Vinaphone | {getSimTypeLabel(sim.type)}
+          </div>
+          <div className="text-xl font-bold text-red-600">
+            {formatPrice(sim.price)}
+          </div>
         </div>
 
-        {/* Content */}
-        <div className="overflow-y-auto p-6 flex-1 custom-scrollbar">
-          {/* Sim Info Summary */}
-          <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-6 text-center">
-            <div className="text-3xl font-black text-[#0066CC] tracking-wider mb-2">
-              {formatPhone(sim.phone)}
+        {errorMsg && (
+          <div className="p-3 bg-red-50 text-red-600 border border-red-200 rounded-lg text-sm">
+            {errorMsg}
+          </div>
+        )}
+
+        <form id="order-form" onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="customerName">Họ tên *</Label>
+              <Input id="customerName" {...register("customerName")} placeholder="Nguyễn Văn A" />
+              {errors.customerName && <p className="text-red-500 text-xs">{errors.customerName.message}</p>}
             </div>
-            <div className="text-sm text-gray-600 mb-2">
-              Vinaphone | {getSimTypeLabel(sim.type)}
-            </div>
-            <div className="text-xl font-bold text-gray-900">
-              {formatPrice(sim.price)}
+
+            <div className="space-y-1.5">
+              <Label htmlFor="customerPhone">SĐT liên hệ *</Label>
+              <Input id="customerPhone" {...register("customerPhone")} placeholder="09..." />
+              {errors.customerPhone && <p className="text-red-500 text-xs">{errors.customerPhone.message}</p>}
             </div>
           </div>
 
-          {errorMsg && (
-            <div className="mb-4 p-3 bg-red-50 text-red-600 border border-red-200 rounded-lg text-sm">
-              {errorMsg}
+          <div className="space-y-2">
+            <Label>Hình thức nhận sim *</Label>
+            <div className="flex items-center gap-6 mt-1">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input 
+                  type="radio" 
+                  value="false" 
+                  checked={!isPickup} 
+                  onChange={() => {
+                    setValue("isPickup", false)
+                    setValue("paymentMethod", PaymentMethod.COD)
+                  }} 
+                  className="w-4 h-4 text-brand focus:ring-brand" 
+                />
+                <span className="text-sm font-medium">🚚 Giao tận nơi</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input 
+                  type="radio" 
+                  value="true" 
+                  checked={isPickup} 
+                  onChange={() => {
+                    setValue("isPickup", true)
+                    setValue("paymentMethod", PaymentMethod.CASH)
+                  }} 
+                  className="w-4 h-4 text-brand focus:ring-brand" 
+                />
+                <span className="text-sm font-medium">🏪 Đến cửa hàng</span>
+              </label>
+            </div>
+          </div>
+
+          {!isPickup ? (
+            <div className="space-y-1.5">
+              <Label htmlFor="customerAddress">Địa chỉ nhận hàng *</Label>
+              <Input id="customerAddress" {...register("customerAddress")} placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/TP" />
+              {errors.customerAddress && <p className="text-red-500 text-xs">{errors.customerAddress.message}</p>}
+            </div>
+          ) : (
+            <div className="bg-gray-50 p-4 rounded-lg border space-y-3">
+              <p className="text-sm text-gray-700 font-medium">📍 Số 68, Đường Trần Phú, Ba Đình, Hà Nội</p>
+              <div className="space-y-1.5">
+                <Label htmlFor="pickupNote" className="text-xs">Ghi chú giờ đến</Label>
+                <Input id="pickupNote" {...register("pickupNote")} placeholder="VD: 15h chiều nay" className="h-8 text-sm" />
+              </div>
             </div>
           )}
 
-          <form id="order-form" onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Họ tên *</label>
-                <input
-                  {...register("customerName")}
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0066CC]/50"
-                  placeholder="Nguyễn Văn A"
-                />
-                {errors.customerName && <p className="text-red-500 text-xs mt-1">{errors.customerName.message}</p>}
-              </div>
+          <div className="space-y-1.5">
+            <Label>Phương thức thanh toán *</Label>
+            <Controller
+              name="paymentMethod"
+              control={control}
+              render={({ field }) => (
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Chọn phương thức" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {!isPickup && <SelectItem value={PaymentMethod.COD}>Thanh toán khi nhận hàng (COD)</SelectItem>}
+                    <SelectItem value={PaymentMethod.BANK_TRANSFER}>Chuyển khoản ngân hàng</SelectItem>
+                    {isPickup && <SelectItem value={PaymentMethod.CASH}>Tiền mặt tại cửa hàng</SelectItem>}
+                    {!isPickup && <SelectItem value={PaymentMethod.MOMO}>Ví Momo</SelectItem>}
+                    {!isPickup && <SelectItem value={PaymentMethod.ZALOPAY}>Ví ZaloPay</SelectItem>}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">SĐT liên hệ *</label>
-                <input
-                  {...register("customerPhone")}
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0066CC]/50"
-                  placeholder="09..."
-                />
-                {errors.customerPhone && <p className="text-red-500 text-xs mt-1">{errors.customerPhone.message}</p>}
-              </div>
-            </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="note">Ghi chú thêm</Label>
+            <Input id="note" {...register("note")} placeholder="Yêu cầu khác..." />
+          </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Hình thức nhận sim *</label>
-              <div className="flex gap-4">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="radio" value="false" {...register("isPickup", { setValueAs: v => v === 'true' })} defaultChecked className="text-[#0066CC] focus:ring-[#0066CC]" />
-                  <span>🚚 Giao tận nơi</span>
-                </label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="radio" value="true" {...register("isPickup", { setValueAs: v => v === 'true' })} className="text-[#0066CC] focus:ring-[#0066CC]" />
-                  <span>🏪 Đến cửa hàng</span>
-                </label>
-              </div>
-            </div>
-
-            {!isPickup ? (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Địa chỉ nhận hàng *</label>
-                <input
-                  {...register("customerAddress")}
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0066CC]/50"
-                  placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/TP"
-                />
-                {errors.customerAddress && <p className="text-red-500 text-xs mt-1">{errors.customerAddress.message}</p>}
-              </div>
-            ) : (
-              <div className="bg-gray-50 p-3 rounded-lg border">
-                <p className="text-sm text-gray-700 font-medium mb-2">📍 Số 68, Đường Trần Phú, Ba Đình, Hà Nội</p>
-                <input
-                  {...register("pickupNote")}
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0066CC]/50 text-sm"
-                  placeholder="Ghi chú giờ đến lấy (VD: 15h chiều nay)"
-                />
-              </div>
-            )}
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Phương thức thanh toán *</label>
-              <select
-                {...register("paymentMethod")}
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0066CC]/50"
-              >
-                {!isPickup && <option value={PaymentMethod.COD}>Thanh toán khi nhận hàng (COD)</option>}
-                <option value={PaymentMethod.BANK_TRANSFER}>Chuyển khoản ngân hàng</option>
-                {isPickup && <option value={PaymentMethod.CASH}>Tiền mặt tại cửa hàng</option>}
-                {!isPickup && <option value={PaymentMethod.MOMO}>Ví Momo</option>}
-                {!isPickup && <option value={PaymentMethod.ZALOPAY}>Ví ZaloPay</option>}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Ghi chú thêm</label>
-              <textarea
-                {...register("note")}
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0066CC]/50"
-                rows={2}
-                placeholder="Yêu cầu khác..."
-              />
-            </div>
-          </form>
-        </div>
-
-        {/* Footer */}
-        <div className="p-4 border-t bg-gray-50 flex justify-end gap-3">
-          <button 
-            type="button" 
-            onClick={onClose}
-            className="px-5 py-2 rounded-lg font-medium text-gray-700 hover:bg-gray-200 transition"
-          >
-            Hủy
-          </button>
-          <button 
-            type="submit" 
-            form="order-form"
-            disabled={isLoading}
-            className="px-6 py-2 rounded-lg font-bold text-white bg-[#0066CC] hover:bg-blue-700 transition flex items-center justify-center min-w-[120px]"
-          >
-            {isLoading ? <Loader2 className="animate-spin" size={20} /> : "Xác nhận đặt"}
-          </button>
-        </div>
-
-      </div>
-    </div>
+          <div className="flex justify-end gap-3 pt-4 border-t mt-6">
+            <Button type="button" variant="outline" onClick={onClose}>
+              Hủy
+            </Button>
+            <Button type="submit" disabled={isLoading} className="bg-brand hover:bg-brand-hover min-w-[120px]">
+              {isLoading ? <Loader2 className="animate-spin h-4 w-4 mr-2" /> : null}
+              Xác nhận đặt
+            </Button>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
   )
 }

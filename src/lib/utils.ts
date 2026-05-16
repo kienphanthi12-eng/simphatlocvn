@@ -1,10 +1,10 @@
-import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
-import { SimType, OrderStatus } from "@prisma/client";
-import { format } from "date-fns";
+import { clsx, type ClassValue } from "clsx"
+import { twMerge } from "tailwind-merge"
+import { SimType, OrderStatus } from "@prisma/client"
+import { format } from "date-fns"
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
+  return twMerge(clsx(inputs))
 }
 
 export function formatPhone(phone: string): string {
@@ -124,7 +124,6 @@ export function classifySimType(phone: string): SimType {
   if (/(\d{2})\1$/.test(phone)) return SimType.LAP_KEP;
   if (/(\d)(\d)\1\2$/.test(phone)) return SimType.LAP_KEP;
   
-  // Custom logic for Gánh Đảo (e.g. aba)
   if (/(\d)(\d)\1$/.test(phone) && phone.slice(-1) !== phone.slice(-2, -1)) return SimType.GANH_DAO;
 
   return SimType.KHAC;
