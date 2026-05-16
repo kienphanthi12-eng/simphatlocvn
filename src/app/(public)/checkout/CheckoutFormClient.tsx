@@ -13,7 +13,15 @@ interface CheckoutFormProps {
   sim: { id: string, phone: string }
 }
 
-type OrderFormValues = z.infer<typeof orderSchema>
+type OrderFormValues = {
+  customerName: string
+  customerPhone: string
+  isPickup: boolean
+  paymentMethod: "COD" | "BANK_TRANSFER" | "MOMO" | "ZALOPAY" | "STORE_CASH"
+  customerAddress?: string
+  pickupNote?: string
+  note?: string
+}
 
 export default function CheckoutFormClient({ sim }: CheckoutFormProps) {
   const router = useRouter()
