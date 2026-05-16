@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Sim {
+  id            String    @id @default(cuid())
+  phone         String    @unique          // "0914123456"
+  prefix        String                     // "0914", "0915", "091", ...
+  type          SimType                    // loại sim
+  price         Int                        // VNĐ
+  priceOriginal Int?                       // giá gốc (để gạch ngang)
+  status        SimStatus @default(AVAILABLE)
+  featured      Boolean   @default(false)
+  description   String?
+  providerCode  String?                    // mã từ nhà cung cấp
+  syncedAt      DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  orders        Order[]
+}
+
+enum SimType {
+  TAM_HOA       // Tam hoa: xxx xxx xxx (3 bộ giống nhau)
+  TAM_HOA_KEP   // Tam hoa kép
+  TU_QUY        // Tứ quý: xxxx ở cuối
+  NGU_QUY       // Ngũ quý
+  LUC_QUY       // Lục quý
+  TIEN_LEN      // Tiến lên: ...1234, ...5678
+  NAM_SINH      // Năm sinh: chứa năm sinh
+  LOC_PHAT      // Lộc phát: chứa 68, 86, 88
+  DE_NHO        // Dễ nhớ: lặp kép, đối xứng
+  GANH_DAO      // Gánh đảo
+  LAP_KEP       // Lặp kép
+  THAN_TAI      // Thần tài: chứa 79, 97, 99
+  ONG_DIA       // Ông địa: chứa 68
+  VIP           // Sim VIP đặc biệt
+  KHAC          // Khác
+}
+
+enum SimStatus {
+  AVAILABLE
+  RESERVED     // đang giữ chờ thanh toán
+  SOLD
+  HIDDEN
+}
+
+model Order {
+  id              String        @id @default(cuid())
+  orderCode       String        @unique   // "SPL-20240101-001"
+  sim             Sim           @relation(fields: [simId], references: [id])
+  simId           String
+  customerName    String
+  customerPhone   String
+  customerAddress String?
+  isPickup        Boolean       @default(false)  // true = đến cửa hàng lấy
+  pickupNote      String?                         // ghi chú giờ đến lấy
+  paymentMethod   PaymentMethod
+  status          OrderStatus   @default(PENDING)
+  note            String?
+  totalAmount     Int
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+enum PaymentMethod {
+  COD
+  BANK_TRANSFER
+  MOMO
+  ZALOPAY
+  STORE_CASH     // trả tiền mặt tại cửa hàng
+}
+
+enum OrderStatus {
+  PENDING        // chờ xác nhận
+  CONFIRMED      // đã xác nhận
+  SHIPPING       // đang giao (ship)
+  READY_PICKUP   // sẵn sàng để khách đến lấy
+  DELIVERED      // đã giao / đã lấy
+  CANCELLED
+}
+
+model AdminUser {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  createdAt DateTime @default(now())
+}
+
+model Setting {
+  key   String @id
+  value String
+}
