@@ -4,10 +4,10 @@ import { SimStatus } from "@prisma/client";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { phone: string } }
+  { params }: { params: Promise<{ phone: string }> }
 ) {
   try {
-    const { phone } = params;
+    const { phone } = await params;
 
     const sim = await prisma.sim.findUnique({
       where: { phone }

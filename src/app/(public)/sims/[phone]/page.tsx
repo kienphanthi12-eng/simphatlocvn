@@ -9,13 +9,12 @@ import { SimTypeBadge } from "@/components/ui/Badge"
 import { OrderButton } from "@/components/sim/OrderButton"
 
 interface Props {
-  params: { phone: string }
+  params: Promise<{ phone: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  // Await params if needed in newer Next.js versions, but for layout type safety:
-  const resolvedParams = await Promise.resolve(params);
-  const sim = await prisma.sim.findUnique({ where: { phone: resolvedParams.phone } })
+  const { phone } = await params;
+  const sim = await prisma.sim.findUnique({ where: { phone } })
   if (!sim) return { title: "Không tìm thấy Sim" }
 
   const label = getSimTypeLabel(sim.type)
@@ -28,8 +27,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function SimDetailPage({ params }: Props) {
-  const resolvedParams = await Promise.resolve(params);
-  const sim = await prisma.sim.findUnique({ where: { phone: resolvedParams.phone } })
+  const { phone } = await params;
+  const sim = await prisma.sim.findUnique({ where: { phone } })
   
   if (!sim) {
     notFound()

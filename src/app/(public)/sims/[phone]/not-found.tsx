@@ -1,7 +1,8 @@
 import { SearchX } from "lucide-react"
 import Link from "next/link"
 
-export default function NotFound() {
+export default async function NotFound({ params }: { params: Promise<{ phone: string }> }) {
+  const { phone } = await params;
   return (
     <div className="min-h-[60vh] bg-gray-50 flex flex-col items-center justify-center px-4">
       <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center max-w-md w-full">
