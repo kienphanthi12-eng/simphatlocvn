@@ -3,7 +3,7 @@ import prisma from "@/lib/db";
 import { adminLoginSchema } from "@/lib/validations";
 import bcrypt from "bcryptjs";
 import { signJWT } from "@/lib/jwt";
-import { z } from "zod";
+import { z, ZodError } from "zod";
 
 export async function POST(req: NextRequest) {
   try {
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("Admin Auth Error:", error);
     if (error instanceof z.ZodError) {
-      return NextResponse.json({ error: "Dữ liệu không hợp lệ", details: error.errors }, { status: 400 });
+      return NextResponse.json({ error: "Dữ liệu không hợp lệ", details: error instanceof ZodError ? error.errors : error.message }, { status: 400 });
     }
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
