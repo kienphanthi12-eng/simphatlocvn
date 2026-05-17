@@ -50,15 +50,16 @@ export default function Header() {
       {/* Main header */}
       <div className="mx-auto max-w-7xl flex items-center justify-between px-4 py-3 gap-4">
         {/* Imperial Seal Logo */}
-        <Link href="/" className="flex items-center gap-3 shrink-0">
-          <div className="h-11 w-11 shrink-0 rounded-lg overflow-hidden border border-[#B3925F]/50 shadow-xs relative bg-[#5C1D24] flex items-center justify-center">
-            <img src="/logo.png" alt="Sim Phát Lộc Logo" className="h-full w-full object-cover scale-[1.05]" />
+        <Link href="/" className="flex items-center gap-3.5 shrink-0 group">
+          <div className="h-[52px] w-[52px] shrink-0 rounded-xl overflow-hidden border border-[#B3925F]/60 shadow-md shadow-[#B3925F]/10 relative bg-white flex items-center justify-center transition-all duration-300 group-hover:scale-[1.05] group-hover:border-[#B3925F] group-hover:shadow-lg group-hover:shadow-[#B3925F]/15">
+            <img src="/logo.png" alt="Sim Phát Lộc Logo" className="h-full w-full object-cover scale-[1.08] transition-transform duration-500 group-hover:scale-[1.12]" />
           </div>
-          <div>
-            <h1 className="text-2xl font-black text-[#5C1D24] leading-tight font-display tracking-wide" style={{ fontFamily: "var(--font-display)" }}>
-              Sim Phát Lộc
+          <div className="flex flex-col justify-center">
+            <h1 className="text-2xl md:text-[25px] font-black leading-none font-display tracking-wide flex items-center gap-1.5" style={{ fontFamily: "var(--font-display)" }}>
+              <span className="text-[#B3925F] transition-colors duration-300 group-hover:text-[#5C1D24]">Sim</span>
+              <span className="text-[#5C1D24] transition-colors duration-300 group-hover:text-[#B3925F]">Phát Lộc</span>
             </h1>
-            <p className="text-[9px] text-[#8C6D41]/80 font-bold uppercase tracking-wider leading-none">
+            <p className="text-[9.5px] text-[#8C6D41] font-extrabold uppercase tracking-[0.22em] mt-1.5 leading-none transition-all duration-300 group-hover:tracking-[0.25em]">
               Hoàng Gia Di Sản
             </p>
           </div>
