@@ -11,12 +11,14 @@ export async function POST(req: NextRequest) {
     const lastMessage = messages[messages.length - 1]?.content || ""
     const apiKey = process.env.DEEPSEEK_API_KEY || ""
 
-    // Lấy một số sim nổi bật từ DB để làm gợi ý thật nếu AI muốn đề xuất
-    const recommendedSims = await prisma.sim.findMany({
-      where: { status: "AVAILABLE" },
-      take: 5,
-      orderBy: { price: "asc" }
+    // Lấy một số sim nổi bật từ DB để làm gợi ý thật (lọc trong JS tránh lỗi ép kiểu Postgres)
+    const rawSims = await prisma.sim.findMany({
+      orderBy: { price: "asc" },
+      take: 50
     })
+    const recommendedSims = rawSims
+      .filter(s => s.status === "AVAILABLE")
+      .slice(0, 5)
 
     const simListContext = recommendedSims
       .map(s => `- Số: ${s.phone} | Giá: ${s.price.toLocaleString("vi-VN")}đ | Thể loại: ${s.type}`)
