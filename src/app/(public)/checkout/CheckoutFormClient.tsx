@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation"
 import { Loader2 } from "lucide-react"
 
 interface CheckoutFormProps {
-  sim: { id: string, phone: string }
+  sim: { id: string; phone: string }
 }
 
 type OrderFormValues = {
@@ -20,6 +20,22 @@ type OrderFormValues = {
   note?: string
 }
 
+const FieldLabel = ({ children }: { children: React.ReactNode }) => (
+  <label className="block text-[10px] uppercase tracking-[0.2em] font-bold gold-text mb-1.5">
+    {children}
+  </label>
+)
+
+const FieldInput = ({ error, ...props }: React.InputHTMLAttributes<HTMLInputElement> & { error?: string }) => (
+  <div>
+    <input
+      {...props}
+      className="w-full bg-transparent border-b-2 border-gold-deep/30 focus:border-gold-deep text-ink text-sm font-serif py-2 outline-none transition-colors placeholder:text-ink/30"
+    />
+    {error && <p className="text-red-600 text-xs mt-1">{error}</p>}
+  </div>
+)
+
 export default function CheckoutFormClient({ sim }: CheckoutFormProps) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
@@ -29,16 +45,17 @@ export default function CheckoutFormClient({ sim }: CheckoutFormProps) {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<OrderFormValues>({
     defaultValues: {
       isPickup: false,
-      paymentMethod: 'COD',
-      customerName: '',
-      customerPhone: '',
-      customerAddress: '',
-      pickupNote: '',
-      note: '',
+      paymentMethod: "COD",
+      customerName: "",
+      customerPhone: "",
+      customerAddress: "",
+      pickupNote: "",
+      note: "",
     },
   })
 
@@ -79,65 +96,94 @@ export default function CheckoutFormClient({ sim }: CheckoutFormProps) {
   return (
     <div>
       {errorMsg && (
-        <div className="mb-6 p-4 bg-red-50 text-red-600 border border-red-200 rounded-lg font-medium">
-          {errorMsg}
+        <div className="mb-6 p-4 bg-red-50 text-red-700 border border-red-200/60 rounded-xl text-xs font-semibold">
+          ⚠ {errorMsg}
         </div>
       )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        
+        {/* Tên + SĐT */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Họ tên *</label>
-            <input
-              {...register("customerName")}
-              className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0066CC]/50 transition"
+            <FieldLabel>Họ và tên *</FieldLabel>
+            <FieldInput
+              {...register("customerName", { required: "Vui lòng nhập họ tên" })}
               placeholder="Nhập họ và tên..."
+              error={errors.customerName?.message}
             />
-            {errors.customerName && <p className="text-red-500 text-sm mt-1">{errors.customerName.message}</p>}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">SĐT liên hệ *</label>
-            <input
-              {...register("customerPhone")}
-              className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0066CC]/50 transition"
+            <FieldLabel>SĐT liên hệ *</FieldLabel>
+            <FieldInput
+              {...register("customerPhone", { required: "Vui lòng nhập số điện thoại" })}
               placeholder="Ví dụ: 09..."
+              error={errors.customerPhone?.message}
             />
-            {errors.customerPhone && <p className="text-red-500 text-sm mt-1">{errors.customerPhone.message}</p>}
           </div>
         </div>
 
+        {/* Hình thức nhận */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-3">Hình thức nhận sim *</label>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <label className="flex-1 flex items-center gap-3 p-4 border rounded-xl cursor-pointer hover:bg-gray-50 transition has-[:checked]:border-[#0066CC] has-[:checked]:bg-blue-50/50">
-              <input type="radio" value="false" {...register("isPickup", { setValueAs: v => v === 'true' })} defaultChecked className="text-[#0066CC] focus:ring-[#0066CC] w-5 h-5" />
-              <span className="font-medium text-gray-900">🚚 Giao hàng tận nơi</span>
-            </label>
-            <label className="flex-1 flex items-center gap-3 p-4 border rounded-xl cursor-pointer hover:bg-gray-50 transition has-[:checked]:border-[#0066CC] has-[:checked]:bg-blue-50/50">
-              <input type="radio" value="true" {...register("isPickup", { setValueAs: v => v === 'true' })} className="text-[#0066CC] focus:ring-[#0066CC] w-5 h-5" />
-              <span className="font-medium text-gray-900">🏪 Đến cửa hàng lấy</span>
-            </label>
+          <FieldLabel>Hình thức nhận sim *</FieldLabel>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+            {[
+              { value: false, label: "🚚 Giao hàng tận nơi", payment: "COD" as const },
+              { value: true, label: "🏪 Đến cửa hàng lấy", payment: "STORE_CASH" as const },
+            ].map((opt) => (
+              <label
+                key={String(opt.value)}
+                onClick={() => {
+                  setValue("isPickup", opt.value)
+                  setValue("paymentMethod", opt.payment)
+                }}
+                className={`flex items-center gap-3 cursor-pointer border rounded-xl p-4 text-sm font-medium transition-all ${
+                  isPickup === opt.value
+                    ? "border-gold-deep bg-gold/10 text-ink shadow-sm"
+                    : "border-gold-deep/20 bg-white/50 text-ink/60 hover:border-gold-deep/40"
+                }`}
+              >
+                <span className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
+                  isPickup === opt.value ? "border-gold-deep" : "border-ink/20"
+                }`}>
+                  {isPickup === opt.value && <span className="w-2 h-2 rounded-full bg-gold-deep" />}
+                </span>
+                <span className="font-semibold">{opt.label}</span>
+              </label>
+            ))}
           </div>
         </div>
 
-        {!isPickup && (
+        {/* Địa chỉ / Ghi chú */}
+        {!isPickup ? (
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Địa chỉ giao hàng *</label>
-            <input
-              {...register("customerAddress")}
-              className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0066CC]/50 transition"
+            <FieldLabel>Địa chỉ giao hàng *</FieldLabel>
+            <FieldInput
+              {...register("customerAddress", { required: !isPickup ? "Vui lòng nhập địa chỉ" : false })}
               placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/TP"
+              error={errors.customerAddress?.message}
             />
-            {errors.customerAddress && <p className="text-red-500 text-sm mt-1">{errors.customerAddress.message}</p>}
+          </div>
+        ) : (
+          <div className="bg-gold/10 border border-gold-deep/25 rounded-xl p-4 space-y-3">
+            <p className="text-xs font-semibold text-ink/75">📍 <span className="text-ink font-bold">Số 68, Đường Trần Phú, Ba Đình, Hà Nội</span></p>
+            <div>
+              <FieldLabel>Ghi chú giờ đến</FieldLabel>
+              <FieldInput
+                {...register("pickupNote")}
+                placeholder="VD: 15h chiều nay"
+              />
+            </div>
           </div>
         )}
 
+        {/* Thanh toán */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Phương thức thanh toán *</label>
+          <FieldLabel>Phương thức thanh toán *</FieldLabel>
           <select
             {...register("paymentMethod")}
-            className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0066CC]/50 transition bg-white"
+            className="w-full bg-transparent border-0 border-b-2 border-gold-deep/30 focus:border-gold-deep rounded-none h-10 text-sm font-serif px-0 outline-none transition-colors cursor-pointer"
           >
             {!isPickup && <option value={PaymentMethod.COD}>Thanh toán khi nhận hàng (COD)</option>}
             <option value={PaymentMethod.BANK_TRANSFER}>Chuyển khoản ngân hàng</option>
@@ -147,22 +193,25 @@ export default function CheckoutFormClient({ sim }: CheckoutFormProps) {
           </select>
         </div>
 
+        {/* Ghi chú thêm */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Ghi chú thêm</label>
+          <FieldLabel>Ghi chú thêm</FieldLabel>
           <textarea
             {...register("note")}
-            className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0066CC]/50 transition"
+            className="w-full bg-transparent border-2 border-gold-deep/20 focus:border-gold-deep rounded-xl p-3 text-ink text-sm font-serif outline-none transition-colors placeholder:text-ink/30"
             rows={3}
             placeholder="Yêu cầu khác về thời gian giao hàng, cắt sim..."
           />
         </div>
 
-        <button 
-          type="submit" 
+        {/* Nút đặt mua */}
+        <button
+          type="submit"
           disabled={isLoading}
-          className="w-full py-4 rounded-xl font-bold text-white text-lg bg-[#0066CC] hover:bg-blue-700 transition flex items-center justify-center shadow-lg shadow-blue-200"
+          className="w-full lacquer border border-gold-deep rounded-xl py-4 text-xs font-bold uppercase tracking-[0.25em] shadow-lg hover:scale-[1.01] transition-all disabled:opacity-70 disabled:cursor-wait flex items-center justify-center gap-3 text-gold-soft"
         >
-          {isLoading ? <Loader2 className="animate-spin" size={24} /> : "Xác Nhận Đặt Hàng"}
+          {isLoading && <Loader2 className="h-5 w-5 animate-spin" />}
+          {isLoading ? "Đang xử lý đặt hàng…" : "✦ Xác Nhận Đặt Mua Sim"}
         </button>
       </form>
     </div>
