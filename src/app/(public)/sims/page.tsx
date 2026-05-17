@@ -44,7 +44,16 @@ export default async function SimsPage({ searchParams }: { searchParams: Promise
 
   if (params.search) {
     const cleanSearch = params.search.replace(/\s+/g, "")
-    where.phone = { contains: cleanSearch }
+    const isDigitsOnlyOrWildcard = /^[0-9*]+$/.test(cleanSearch)
+    
+    if (isDigitsOnlyOrWildcard) {
+      where.phone = { contains: cleanSearch.replace(/\*/g, "") }
+    } else {
+      where.OR = [
+        { phone: { contains: cleanSearch } },
+        { description: { contains: cleanSearch, mode: 'insensitive' } }
+      ]
+    }
   }
 
   // Build order by
