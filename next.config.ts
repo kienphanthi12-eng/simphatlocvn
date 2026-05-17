@@ -1,5 +1,6 @@
 import type { NextConfig } from 'next'
 
+// Force redeployment trigger with the build fix
 const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
