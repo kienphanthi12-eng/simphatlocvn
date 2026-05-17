@@ -44,7 +44,7 @@ export function PhongThuyChatbot() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "Kính chào Quý chủ nhân. Lão phu là Thầy Phong Thủy AI của cát điếm Sim Phát Lộc. Lão phu ở đây để trợ duyên cho chủ nhân tính điểm cát hung, luận quẻ Kinh Dịch, và tìm kiếm bảo số hộ thân đắc lực nhất. Chủ nhân muốn Lão phu bấm quẻ về phương diện nào hôm nay?",
+      content: "Kính chào Quý chủ nhân! Lão phu là Thầy Phong Thủy AI của Sim Phát Lộc. để khai quang bảo số trợ vận chuẩn xác nhất, xin hỏi chủ nhân sinh năm bao nhiêu âm lịch và là Nam hay Nữ mạng?",
     },
   ])
   const [input, setInput] = useState("")
