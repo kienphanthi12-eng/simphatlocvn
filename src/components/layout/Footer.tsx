@@ -2,60 +2,69 @@ import Link from "next/link"
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-gray-300 pt-16 pb-8">
-      <div className="container mx-auto px-4">
+    <footer className="bg-[#110C0B] text-slate-300 pt-16 pb-8 border-t-2 border-amber-500/25 relative overflow-hidden">
+      {/* Subtle traditional clouds watermark pattern inside the footer */}
+      <div className="absolute inset-0 bg-cloud-pattern opacity-[0.03] pointer-events-none" />
+      
+      <div className="container mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           
           {/* Cột 1 */}
-          <div>
-            <h3 className="text-2xl font-bold text-white mb-4">
-              <span className="text-[#0066CC]">Sim</span> Phát Lộc
+          <div className="space-y-4">
+            <h3 className="text-2xl font-black text-white font-display tracking-wide" style={{ fontFamily: "var(--font-display)" }}>
+              <span className="text-amber-500">Sim</span> Phát Lộc
             </h3>
-            <p className="mb-4 text-sm leading-relaxed">
-              Chuyên cung cấp sim Vinaphone số đẹp toàn quốc. Uy tín, giao sim tận nơi, vào tên chính chủ nhanh chóng.
+            <p className="text-xs leading-relaxed text-slate-400 font-medium">
+              Chuyên cung cấp sim Vinaphone số đẹp toàn quốc. Hàng ngàn sim cát tường hợp phong thủy, mang lại may mắn, lộc phát và sự thịnh vượng bền vững cho gia chủ.
             </p>
           </div>
 
           {/* Cột 2 */}
           <div>
-            <h4 className="text-white font-bold text-lg mb-4">Liên hệ</h4>
-            <ul className="space-y-3 text-sm">
+            <h4 className="text-white font-bold text-sm uppercase tracking-wider mb-4 border-b border-amber-500/20 pb-2">
+              Thông tin liên hệ
+            </h4>
+            <ul className="space-y-3 text-xs font-medium text-slate-400">
               <li>📍 Số 68, Đường Trần Phú, Ba Đình, Hà Nội</li>
-              <li>📞 Hotline: <span className="text-[#0066CC] font-bold">0914 123 456</span></li>
-              <li>💬 Zalo: 0914 123 456</li>
-              <li>⏰ Giờ mở cửa: 8:00 - 21:00 mỗi ngày</li>
+              <li>📞 Hotline: <span className="text-amber-500 font-bold font-mono">0914 123 456</span></li>
+              <li>💬 Zalo hỗ trợ: 0914 123 456</li>
+              <li>⏰ Giờ làm việc: 8:00 - 21:00 mỗi ngày</li>
             </ul>
           </div>
 
           {/* Cột 3 */}
           <div>
-            <h4 className="text-white font-bold text-lg mb-4">Thanh toán</h4>
-            <ul className="space-y-3 text-sm">
+            <h4 className="text-white font-bold text-sm uppercase tracking-wider mb-4 border-b border-amber-500/20 pb-2">
+              Thông tin giao dịch
+            </h4>
+            <ul className="space-y-3 text-xs font-medium text-slate-400">
               <li>🏦 Ngân hàng: <strong className="text-white">Vietcombank</strong></li>
-              <li>💳 Số TK: <strong className="text-white tracking-wider">1234 5678 90</strong></li>
+              <li>💳 Số TK: <strong className="text-amber-400 tracking-wider font-mono">1234 5678 90</strong></li>
               <li>👤 Tên TK: <strong className="text-white">NGUYEN VAN A</strong></li>
-              <li className="pt-2 text-xs italic text-gray-400">
-                Lưu ý: Nội dung chuyển khoản ghi số điện thoại quý khách muốn mua.
+              <li className="pt-2 text-[10px] italic text-slate-500 leading-relaxed">
+                Lưu ý: Nội dung chuyển khoản vui lòng ghi số điện thoại quý khách muốn đặt mua.
               </li>
             </ul>
           </div>
 
           {/* Cột 4 */}
           <div>
-            <h4 className="text-white font-bold text-lg mb-4">Tìm kiếm nhanh</h4>
-            <ul className="space-y-2 text-sm">
-              <li><Link href="/sims?type=TAM_HOA" className="hover:text-[#0066CC] transition">Sim Tam Hoa</Link></li>
-              <li><Link href="/sims?type=TU_QUY" className="hover:text-[#0066CC] transition">Sim Tứ Quý</Link></li>
-              <li><Link href="/sims?type=LOC_PHAT" className="hover:text-[#0066CC] transition">Sim Lộc Phát</Link></li>
-              <li><Link href="/sims?type=TIEN_LEN" className="hover:text-[#0066CC] transition">Sim Tiến Lên</Link></li>
-              <li><Link href="/sims?type=NAM_SINH" className="hover:text-[#0066CC] transition">Sim Năm Sinh</Link></li>
+            <h4 className="text-white font-bold text-sm uppercase tracking-wider mb-4 border-b border-amber-500/20 pb-2">
+              Tìm kiếm nhanh
+            </h4>
+            <ul className="space-y-2 text-xs font-semibold">
+              <li><Link href="/sims?type=TAM_HOA" className="hover:text-amber-500 text-slate-400 transition">Sim Tam Hoa</Link></li>
+              <li><Link href="/sims?type=TU_QUY" className="hover:text-amber-500 text-slate-400 transition">Sim Tứ Quý</Link></li>
+              <li><Link href="/sims?type=LOC_PHAT" className="hover:text-amber-500 text-slate-400 transition">Sim Lộc Phát</Link></li>
+              <li><Link href="/sims?type=TIEN_LEN" className="hover:text-amber-500 text-slate-400 transition">Sim Tiến Lên</Link></li>
+              <li><Link href="/sims?type=NAM_SINH" className="hover:text-amber-500 text-slate-400 transition">Sim Năm Sinh</Link></li>
             </ul>
           </div>
 
         </div>
 
-        <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-500">
-          <p>© {new Date().getFullYear()} Sim Phát Lộc. Tất cả các quyền được bảo lưu.</p>
+        <div className="border-t border-slate-900 pt-8 text-center text-xs text-slate-600 font-medium">
+          <p>© {new Date().getFullYear()} Sim Phát Lộc - Hoàng Gia Di Sản. Bảo lưu mọi quyền.</p>
         </div>
       </div>
     </footer>
