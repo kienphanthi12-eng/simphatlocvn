@@ -269,6 +269,11 @@ export function PhongThuySidebar({ onSearch, isLoading, metaInfo }: PhongThuySid
         </div>
       </div>
 
+      {/* Royal Dragon & Phoenix Divider */}
+      <div className="flex justify-center items-center py-1.5 opacity-90 select-none pointer-events-none transition-transform duration-500 hover:scale-[1.05]">
+        <img src="/royal_decorations.png" alt="Rồng Phượng Vương Giả" className="h-10 object-contain mix-blend-multiply" />
+      </div>
+
       {/* Card 2: Bộ lọc kết quả */}
       <div className="bg-white/95 rounded-2xl border-gold-scroll overflow-hidden shadow-sm">
         <div className="bg-burgundy-gradient text-white px-4 py-3 flex items-center gap-2 border-b border-red-950/15">

@@ -245,16 +245,21 @@ export function SimPhongThuyClient() {
 
         {/* Empty state: chưa tìm */}
         {!hasSearched && (
-          <div className="bg-card rounded-xl border border-border p-12 text-center">
-            <div className="flex justify-center mb-4">
-              <Compass className="h-16 w-16 text-[#1a56db]/20" />
+          <div className="bg-white/95 rounded-2xl border border-[#B3925F]/35 p-12 text-center shadow-xs relative overflow-hidden">
+            {/* Fine royal corner frames */}
+            <div className="absolute top-2.5 left-2.5 w-6 h-6 border-t border-l border-[#B3925F]/40 rounded-tl-sm pointer-events-none" />
+            <div className="absolute top-2.5 right-2.5 w-6 h-6 border-t border-r border-[#B3925F]/40 rounded-tr-sm pointer-events-none" />
+            <div className="absolute bottom-2.5 left-2.5 w-6 h-6 border-b border-l border-[#B3925F]/40 rounded-bl-sm pointer-events-none" />
+            <div className="absolute bottom-2.5 right-2.5 w-6 h-6 border-b border-r border-[#B3925F]/40 rounded-br-sm pointer-events-none" />
+            
+            <div className="flex justify-center mb-6">
+              <img src="/royal_decorations.png" alt="Rồng Phượng Vương Giả" className="h-28 object-contain mix-blend-multiply opacity-90 transition-transform duration-700 hover:scale-[1.05]" />
             </div>
-            <h3 className="text-lg font-bold text-foreground mb-2">Tìm sim hợp mệnh của bạn</h3>
-            <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-              Nhập ngày sinh và thông tin cá nhân vào form bên {" "}
-              <span className="hidden lg:inline">trái</span>
-              <span className="lg:hidden">trên</span>
-              {" "}để chúng tôi tìm sim Vinaphone hợp phong thủy cho bạn.
+            <h3 className="text-xl font-black text-[#5C1D24] mb-2.5 font-display tracking-wide" style={{ fontFamily: "var(--font-display)" }}>
+              Tra Cứu Sim Hợp Mệnh Đại Cát
+            </h3>
+            <p className="text-sm text-slate-500 max-w-sm mx-auto font-medium leading-relaxed">
+              Nhập giờ sinh và ngày sinh của bạn ở form kế bên để chúng tôi phân tích quẻ dịch hoàng cung và tìm sim Vinaphone hợp phong thủy đại cát nhất.
             </p>
           </div>
         )}
