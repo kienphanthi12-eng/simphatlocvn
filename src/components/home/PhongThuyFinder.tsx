@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation"
 
 export function PhongThuyFinder() {
   const router = useRouter()
+  const [ngaySinh, setNgaySinh] = useState("")
+  const [thangSinh, setThangSinh] = useState("")
   const [namSinh, setNamSinh] = useState("")
   const [gioiTinh, setGioiTinh] = useState("nam")
   const [gioSinh, setGioSinh] = useState("all")
@@ -13,6 +15,8 @@ export function PhongThuyFinder() {
     e.preventDefault()
     if (!namSinh) return
     const qs = new URLSearchParams({
+      ngaySinh,
+      thangSinh,
       namSinh,
       gioiTinh,
       gioSinh,
@@ -35,24 +39,47 @@ export function PhongThuyFinder() {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-8 items-end relative z-10">
-        {/* Input 1: Năm sinh */}
-        <div className="flex flex-col space-y-2">
-          <label className="text-[10px] uppercase tracking-[0.25em] gold-text font-sans font-bold">Năm sinh dương lịch</label>
-          <input
-            type="number"
-            required
-            min="1950"
-            max="2030"
-            placeholder="VD: 1995"
-            value={namSinh}
-            onChange={(e) => setNamSinh(e.target.value)}
-            className="w-full bg-transparent border-b-2 border-gold-deep/30 focus:border-gold-deep text-ink text-lg font-serif py-2 outline-none transition-colors placeholder:text-ink/30"
-          />
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 items-end relative z-10">
+        
+        {/* Input 1: Ngày tháng năm sinh */}
+        <div className="flex flex-col space-y-2 sm:col-span-2 md:col-span-2">
+          <label className="text-[10px] uppercase tracking-[0.25em] gold-text font-sans font-bold">Ngày tháng năm sinh (Dương lịch)</label>
+          <div className="grid grid-cols-3 gap-2">
+            <input
+              type="number"
+              required
+              min="1"
+              max="31"
+              placeholder="Ngày"
+              value={ngaySinh}
+              onChange={(e) => setNgaySinh(e.target.value)}
+              className="bg-transparent border-b-2 border-gold-deep/30 focus:border-gold-deep text-ink text-center text-lg font-serif py-2 outline-none transition-colors placeholder:text-ink/30"
+            />
+            <input
+              type="number"
+              required
+              min="1"
+              max="12"
+              placeholder="Tháng"
+              value={thangSinh}
+              onChange={(e) => setThangSinh(e.target.value)}
+              className="bg-transparent border-b-2 border-gold-deep/30 focus:border-gold-deep text-ink text-center text-lg font-serif py-2 outline-none transition-colors placeholder:text-ink/30"
+            />
+            <input
+              type="number"
+              required
+              min="1950"
+              max="2030"
+              placeholder="Năm"
+              value={namSinh}
+              onChange={(e) => setNamSinh(e.target.value)}
+              className="bg-transparent border-b-2 border-gold-deep/30 focus:border-gold-deep text-ink text-center text-lg font-serif py-2 outline-none transition-colors placeholder:text-ink/30"
+            />
+          </div>
         </div>
 
         {/* Input 2: Giới tính */}
-        <div className="flex flex-col space-y-2">
+        <div className="flex flex-col space-y-2 col-span-1">
           <label className="text-[10px] uppercase tracking-[0.25em] gold-text font-sans font-bold">Bản mệnh giới tính</label>
           <select
             value={gioiTinh}
@@ -65,7 +92,7 @@ export function PhongThuyFinder() {
         </div>
 
         {/* Input 3: Giờ sinh */}
-        <div className="flex flex-col space-y-2">
+        <div className="flex flex-col space-y-2 col-span-1">
           <label className="text-[10px] uppercase tracking-[0.25em] gold-text font-sans font-bold">Giờ sinh linh khí</label>
           <select
             value={gioSinh}
@@ -89,7 +116,7 @@ export function PhongThuyFinder() {
         </div>
 
         {/* Submit CTA Button */}
-        <div className="md:col-span-3 flex justify-center mt-6">
+        <div className="col-span-1 sm:col-span-2 md:col-span-4 flex justify-center mt-6">
           <button
             type="submit"
             className="lacquer border border-gold-deep px-10 py-3.5 rounded-lg text-xs font-sans font-bold uppercase tracking-[0.3em] shadow-lg transition-transform hover:scale-[1.03]"
