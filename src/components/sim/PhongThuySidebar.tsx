@@ -99,34 +99,34 @@ export function PhongThuySidebar({ onSearch, isLoading, metaInfo }: PhongThuySid
   const previewCungMenh = namSinh ? getCungMenh(parseInt(namSinh), gioiTinh) : null
 
   return (
-    <aside className="w-[260px] flex-shrink-0 space-y-4 sticky top-24">
+    <aside className="w-[260px] flex-shrink-0 space-y-5 sticky top-24">
 
       {/* Card 1: Form tìm sim hợp mệnh */}
-      <div className="bg-card rounded-xl border border-border overflow-hidden shadow-sm">
+      <div className="bg-white/95 rounded-2xl border-gold-scroll overflow-hidden shadow-sm">
         {/* Header */}
-        <div className="bg-[#1a56db] text-white px-4 py-3 flex items-center gap-2">
+        <div className="bg-burgundy-gradient text-white px-4 py-3 flex items-center gap-2 border-b border-red-950/15">
           <Sparkles className="h-4 w-4" />
-          <h3 className="font-semibold text-sm">Tìm sim hợp mệnh</h3>
+          <h3 className="font-bold text-sm">Tìm sim hợp mệnh</h3>
         </div>
 
         {/* Tabs */}
-        <div className="flex border-b border-border">
+        <div className="flex border-b border-amber-200/40 bg-amber-50/10">
           <button
             onClick={() => setActiveTab("tuoi")}
-            className={`flex-1 py-2.5 text-xs font-semibold transition-colors ${
+            className={`flex-1 py-2.5 text-xs font-bold transition-all ${
               activeTab === "tuoi"
-                ? "text-[#1a56db] border-b-2 border-[#1a56db] bg-blue-50/50"
-                : "text-muted-foreground hover:text-foreground"
+                ? "text-red-800 border-b-2 border-red-700 bg-amber-50/30"
+                : "text-muted-foreground hover:text-slate-700"
             }`}
           >
             Theo tuổi
           </button>
           <button
             onClick={() => setActiveTab("sim")}
-            className={`flex-1 py-2.5 text-xs font-semibold transition-colors ${
+            className={`flex-1 py-2.5 text-xs font-bold transition-all ${
               activeTab === "sim"
-                ? "text-[#1a56db] border-b-2 border-[#1a56db] bg-blue-50/50"
-                : "text-muted-foreground hover:text-foreground"
+                ? "text-red-800 border-b-2 border-red-700 bg-amber-50/30"
+                : "text-muted-foreground hover:text-slate-700"
             }`}
           >
             Xem phong thủy sim
@@ -213,13 +213,13 @@ export function PhongThuySidebar({ onSearch, isLoading, metaInfo }: PhongThuySid
 
               {/* Preview ban menh */}
               {previewBanMenh && (
-                <div className="bg-blue-50 border border-blue-100 rounded-lg px-3 py-2 text-xs">
-                  <span className="text-muted-foreground">Bản mệnh: </span>
-                  <span className="font-bold text-[#1a56db]">{previewBanMenh}</span>
+                <div className="bg-amber-50/70 border border-amber-200/50 rounded-lg px-3 py-2 text-xs">
+                  <span className="text-amber-900/70">Bản mệnh: </span>
+                  <span className="font-bold text-red-800">{previewBanMenh}</span>
                   {previewCungMenh && (
                     <>
-                      <span className="text-muted-foreground ml-2">Cung: </span>
-                      <span className="font-bold text-[#1a56db]">{previewCungMenh}</span>
+                      <span className="text-amber-900/70 ml-2">Cung: </span>
+                      <span className="font-bold text-red-800">{previewCungMenh}</span>
                     </>
                   )}
                 </div>
@@ -228,7 +228,7 @@ export function PhongThuySidebar({ onSearch, isLoading, metaInfo }: PhongThuySid
               <Button
                 onClick={handleSearchByTuoi}
                 disabled={!namSinh || isLoading}
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm h-10 shadow-md"
+                className="w-full bg-burgundy-gradient text-white font-bold text-sm h-10 shadow-md hover:shadow-lg transition-all border border-red-950/20"
               >
                 {isLoading ? "Đang tìm..." : "Tìm sim hợp tuổi"}
               </Button>
@@ -260,7 +260,7 @@ export function PhongThuySidebar({ onSearch, isLoading, metaInfo }: PhongThuySid
               <Button
                 onClick={handleSearchBySim}
                 disabled={!soSimInput || !namSinh || isLoading}
-                className="w-full bg-[#1a56db] hover:bg-[#1e40af] text-white font-bold text-sm h-10"
+                className="w-full bg-gold-gradient text-white font-bold text-sm h-10 shadow-md hover:shadow-lg transition-all border border-amber-600/20"
               >
                 {isLoading ? "Đang xem..." : "Xem phong thủy"}
               </Button>
@@ -270,10 +270,10 @@ export function PhongThuySidebar({ onSearch, isLoading, metaInfo }: PhongThuySid
       </div>
 
       {/* Card 2: Bộ lọc kết quả */}
-      <div className="bg-card rounded-xl border border-border overflow-hidden shadow-sm">
-        <div className="bg-[#1a56db] text-white px-4 py-3 flex items-center gap-2">
+      <div className="bg-white/95 rounded-2xl border-gold-scroll overflow-hidden shadow-sm">
+        <div className="bg-burgundy-gradient text-white px-4 py-3 flex items-center gap-2 border-b border-red-950/15">
           <SlidersHorizontal className="h-4 w-4" />
-          <h3 className="font-semibold text-sm">Bộ lọc kết quả</h3>
+          <h3 className="font-bold text-sm">Bộ lọc kết quả</h3>
         </div>
         <div className="p-4 space-y-3">
           {/* Điểm PT */}

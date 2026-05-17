@@ -10,6 +10,43 @@ import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { type NguHanh } from "@/lib/phongthuy"
 
+const TrigramCompass = ({ className }: { className?: string }) => (
+  <svg 
+    className={`animate-spin ${className}`} 
+    viewBox="0 0 100 100" 
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    {/* Outer circle with gold border */}
+    <circle cx="50" cy="50" r="46" fill="none" stroke="#D97706" strokeWidth="2" />
+    <circle cx="50" cy="50" r="40" fill="none" stroke="#B45309" strokeWidth="1" strokeDasharray="3 3" />
+    
+    {/* Trigrams (8 directions) */}
+    {/* Càn (☰) - Top */}
+    <path d="M42 16h16M42 20h16M42 24h16" stroke="#991B1B" strokeWidth="2" strokeLinecap="round" />
+    
+    {/* Khôn (☷) - Bottom */}
+    <path d="M42 76h6m4 0h6M42 80h6m4 0h6M42 84h6m4 0h6" stroke="#991B1B" strokeWidth="2" strokeLinecap="round" />
+    
+    {/* Ly (☲) - Right */}
+    <path d="M76 42h16M76 46h6m4 0h6M76 50h16" stroke="#991B1B" strokeWidth="2" strokeLinecap="round" />
+    
+    {/* Khảm (☵) - Left */}
+    <path d="M8 42h6m4 0h6M8 46h16M8 50h6m4 0h6" stroke="#991B1B" strokeWidth="2" strokeLinecap="round" />
+    
+    {/* Inner Taiji (Yin-Yang) symbol at center */}
+    <circle cx="50" cy="50" r="12" fill="#FAF9F5" stroke="#B45309" strokeWidth="1.5" />
+    <path d="M50 38a6 6 0 0 1 0 12 6 6 0 0 0 0 12" fill="none" stroke="#B45309" strokeWidth="1.5" />
+    <path d="M50 38a12 12 0 0 1 0 24A12 12 0 0 0 50 38z" fill="#B45309" opacity="0.15" />
+    <circle cx="50" cy="44" r="2" fill="#B45309" />
+    <circle cx="50" cy="56" r="2" fill="#FAF9F5" stroke="#B45309" strokeWidth="0.5" />
+    
+    {/* Compass Needle */}
+    <path d="M50 28l4 22h-8z" fill="#991B1B" />
+    <path d="M50 72l4-22h-8z" fill="#9CA3AF" />
+    <circle cx="50" cy="50" r="3" fill="#D97706" />
+  </svg>
+)
+
 interface SimResult {
   id: string
   phone: string
@@ -135,7 +172,7 @@ export function SimPhongThuyClient() {
   }
 
   return (
-    <div className="flex flex-col lg:flex-row gap-5 w-full max-w-7xl mx-auto px-4 pb-10">
+    <div className="flex flex-col lg:flex-row gap-6 w-full max-w-7xl mx-auto px-6 py-6 pb-12 bg-parchment bg-cloud-pattern border-gold-scroll rounded-3xl shadow-sm mt-4">
 
       {/* Sidebar Desktop */}
       <div className="hidden lg:block">
@@ -150,7 +187,7 @@ export function SimPhongThuyClient() {
       <div className="lg:hidden">
         <button
           onClick={() => setMobileFilterOpen(o => !o)}
-          className="w-full flex items-center justify-between bg-[#1a56db] text-white px-4 py-3 rounded-xl font-semibold text-sm"
+          className="w-full flex items-center justify-between bg-burgundy-gradient text-white px-4 py-3 rounded-xl font-bold text-sm border border-red-950/10 shadow-sm"
         >
           <span className="flex items-center gap-2">
             <Filter className="h-4 w-4" /> Tìm sim hợp mệnh
@@ -173,12 +210,12 @@ export function SimPhongThuyClient() {
 
         {/* Toolbar */}
         {hasSearched && (
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-card border border-border rounded-xl px-4 py-3">
-            <p className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white/80 border border-amber-200/50 rounded-xl px-4 py-3 shadow-2xs backdrop-blur-xs">
+            <p className="text-sm font-semibold text-slate-800 flex items-center gap-2">
               {isLoading ? (
                 <>
-                  <Compass className="h-4 w-4 animate-spin text-[#1a56db]" />
-                  <span>Đang tầm long chấm điểm phong thủy...</span>
+                  <TrigramCompass className="h-5 w-5 text-amber-700" />
+                  <span className="text-amber-900">Đang tầm long chấm điểm phong thủy...</span>
                 </>
               ) : (
                 <>
