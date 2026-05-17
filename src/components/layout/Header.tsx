@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 
 const navItems = [
   { label: "Trang Chủ", href: "/" },
-  { label: "Sim Phong Thủy", href: "/sims?type=LOC_PHAT,THAN_TAI,ONG_DIA" },
+  { label: "Sim Phong Thủy", href: "/sim-phong-thuy" },
   { label: "Sim Theo Giá", href: "/sims?sort=price_asc" },
   { label: "Tin Tức", href: "#" },
 ]
