@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 
 export function PhongThuyFinder() {
@@ -10,6 +10,30 @@ export function PhongThuyFinder() {
   const [namSinh, setNamSinh] = useState("")
   const [gioiTinh, setGioiTinh] = useState("nam")
   const [gioSinh, setGioSinh] = useState("all")
+  const [isSearching, setIsSearching] = useState(false)
+
+  // Auto-search: khi năm sinh hợp lệ thì debounce 800ms rồi tự tìm
+  useEffect(() => {
+    const year = parseInt(namSinh)
+    if (!namSinh || isNaN(year) || year < 1950 || year > 2030) return
+
+    setIsSearching(true)
+    const timer = setTimeout(() => {
+      const qs = new URLSearchParams({
+        ngaySinh,
+        thangSinh,
+        namSinh,
+        gioiTinh,
+        gioSinh,
+      })
+      router.push(`/sim-phong-thuy?${qs.toString()}`)
+    }, 800)
+
+    return () => {
+      clearTimeout(timer)
+      setIsSearching(false)
+    }
+  }, [ngaySinh, thangSinh, namSinh, gioiTinh, gioSinh])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -47,7 +71,6 @@ export function PhongThuyFinder() {
           <div className="grid grid-cols-3 gap-2">
             <input
               type="number"
-              required
               min="1"
               max="31"
               placeholder="Ngày"
@@ -57,7 +80,6 @@ export function PhongThuyFinder() {
             />
             <input
               type="number"
-              required
               min="1"
               max="12"
               placeholder="Tháng"
@@ -67,7 +89,6 @@ export function PhongThuyFinder() {
             />
             <input
               type="number"
-              required
               min="1950"
               max="2030"
               placeholder="Năm"
@@ -116,13 +137,26 @@ export function PhongThuyFinder() {
         </div>
 
         {/* Submit CTA Button */}
-        <div className="col-span-1 sm:col-span-2 md:col-span-4 flex justify-center mt-6">
+        <div className="col-span-1 sm:col-span-2 md:col-span-4 flex flex-col items-center gap-3 mt-6">
           <button
             type="submit"
-            className="lacquer border border-gold-deep px-10 py-3.5 rounded-lg text-xs font-sans font-bold uppercase tracking-[0.3em] shadow-lg transition-transform hover:scale-[1.03]"
+            disabled={isSearching}
+            className="lacquer border border-gold-deep px-10 py-3.5 rounded-lg text-xs font-sans font-bold uppercase tracking-[0.3em] shadow-lg transition-all hover:scale-[1.03] disabled:opacity-70 disabled:cursor-wait flex items-center gap-3"
           >
-            Khai Quẻ Tìm Sim
+            {isSearching ? (
+              <>
+                <span className="inline-block w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                Đang khai quẻ…
+              </>
+            ) : (
+              "Khai Quẻ Tìm Sim"
+            )}
           </button>
+          {!isSearching && (
+            <p className="text-[10px] text-ink/40 tracking-wide">
+              ✦ Tự động tìm sau khi nhập năm sinh hợp lệ
+            </p>
+          )}
         </div>
       </form>
     </section>
