@@ -8,14 +8,12 @@ import { formatPhone, formatPrice, getSimTypeLabel } from "@/lib/utils"
 import { Sim, PaymentMethod } from "@prisma/client"
 import { useRouter } from "next/navigation"
 import { Loader2 } from "lucide-react"
-import { z } from "zod"
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
 
 interface OrderModalProps {
   sim: Pick<Sim, "id" | "phone" | "type" | "price">
@@ -23,7 +21,15 @@ interface OrderModalProps {
   onClose: () => void
 }
 
-type OrderFormValues = z.infer<typeof orderSchema>
+interface OrderFormValues {
+  customerName: string
+  customerPhone: string
+  isPickup: boolean
+  paymentMethod: PaymentMethod
+  customerAddress?: string
+  pickupNote?: string
+  note?: string
+}
 
 export function OrderModal({ sim, isOpen, onClose }: OrderModalProps) {
   const router = useRouter()
@@ -38,7 +44,7 @@ export function OrderModal({ sim, isOpen, onClose }: OrderModalProps) {
     setValue,
     formState: { errors },
   } = useForm<OrderFormValues>({
-    resolver: zodResolver(orderSchema),
+    resolver: zodResolver(orderSchema) as any,
     defaultValues: {
       isPickup: false,
       paymentMethod: PaymentMethod.COD,
@@ -88,8 +94,8 @@ export function OrderModal({ sim, isOpen, onClose }: OrderModalProps) {
         </DialogHeader>
 
         {/* Sim Info Summary */}
-        <div className="bg-brand-light border border-blue-100 rounded-xl p-4 my-2 text-center">
-          <div className="text-3xl font-black text-brand tracking-wider mb-2 font-mono">
+        <div className="bg-parchment border border-gold-deep/20 rounded-xl p-4 my-2 text-center">
+          <div className="text-3xl font-black text-crimson tracking-wider mb-2 font-mono">
             {formatPhone(sim.phone)}
           </div>
           <div className="text-sm text-gray-600 mb-2">
@@ -145,7 +151,7 @@ export function OrderModal({ sim, isOpen, onClose }: OrderModalProps) {
                   checked={isPickup} 
                   onChange={() => {
                     setValue("isPickup", true)
-                    setValue("paymentMethod", PaymentMethod.CASH)
+                    setValue("paymentMethod", PaymentMethod.STORE_CASH)
                   }} 
                   className="w-4 h-4 text-brand focus:ring-brand" 
                 />
@@ -183,7 +189,7 @@ export function OrderModal({ sim, isOpen, onClose }: OrderModalProps) {
                   <SelectContent>
                     {!isPickup && <SelectItem value={PaymentMethod.COD}>Thanh toán khi nhận hàng (COD)</SelectItem>}
                     <SelectItem value={PaymentMethod.BANK_TRANSFER}>Chuyển khoản ngân hàng</SelectItem>
-                    {isPickup && <SelectItem value={PaymentMethod.CASH}>Tiền mặt tại cửa hàng</SelectItem>}
+                    {isPickup && <SelectItem value={PaymentMethod.STORE_CASH}>Tiền mặt tại cửa hàng</SelectItem>}
                     {!isPickup && <SelectItem value={PaymentMethod.MOMO}>Ví Momo</SelectItem>}
                     {!isPickup && <SelectItem value={PaymentMethod.ZALOPAY}>Ví ZaloPay</SelectItem>}
                   </SelectContent>
@@ -201,7 +207,7 @@ export function OrderModal({ sim, isOpen, onClose }: OrderModalProps) {
             <Button type="button" variant="outline" onClick={onClose}>
               Hủy
             </Button>
-            <Button type="submit" disabled={isLoading} className="bg-brand hover:bg-brand-hover min-w-[120px]">
+            <Button type="submit" disabled={isLoading} className="bg-crimson hover:bg-crimson-deep text-gold-soft min-w-[120px] border border-gold-deep">
               {isLoading ? <Loader2 className="animate-spin h-4 w-4 mr-2" /> : null}
               Xác nhận đặt
             </Button>

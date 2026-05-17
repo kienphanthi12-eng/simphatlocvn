@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Sparkles, X, ShoppingBag } from "lucide-react"
+import { X, ShoppingBag } from "lucide-react"
 
 interface Transaction {
   name: string
@@ -31,29 +31,25 @@ export function AuspiciousNotification() {
   useEffect(() => {
     if (isDismissed) return
 
-    // Show initial notification after 3 seconds
+    // Show initial notification after 4 seconds
     const initialShowTimer = setTimeout(() => {
       setIsVisible(true)
     }, 4000)
 
     // Setup cycling interval
     const cycleInterval = setInterval(() => {
-      // First, slide out
       setIsVisible(false)
 
-      // Wait for exit animation, then change index and slide in
       setTimeout(() => {
         setCurrentIdx((prev) => (prev + 1) % TRANSACTIONS.length)
         setIsVisible(true)
       }, 600)
-    }, 18000) // Shows a new one every 18 seconds
+    }, 18000)
 
-    // Autohide timer: stays on screen for 6.5 seconds
     const autoHideInterval = setInterval(() => {
       setIsVisible(false)
     }, 18000)
 
-    // Setup an initial auto-hide for the first show
     const firstHideTimer = setTimeout(() => {
       setIsVisible(false)
     }, 10500)
@@ -72,37 +68,37 @@ export function AuspiciousNotification() {
 
   return (
     <div
-      className={`fixed bottom-24 left-4 md:bottom-6 md:left-6 z-40 max-w-[340px] md:max-w-sm transition-all duration-700 ease-out transform ${
+      className={`fixed bottom-24 left-4 md:bottom-6 md:left-6 z-45 max-w-[340px] md:max-w-sm transition-all duration-700 ease-out transform ${
         isVisible
           ? "translate-y-0 opacity-100 scale-100"
           : "translate-y-12 opacity-0 scale-95 pointer-events-none"
       }`}
     >
-      {/* Quiet Luxury clean card with 1px gold outline */}
-      <div className="bg-[#FBF9F6] border border-[#E5DCCB] rounded-xl shadow-md relative p-4 pr-9 flex gap-3 overflow-hidden">
+      {/* Imperial corner ornament styling with gold line */}
+      <div className="bg-parchment border border-gold-deep/30 rounded-xl shadow-2xl relative p-4 pr-9 flex gap-3 overflow-hidden">
         {/* Subtle cloud backdrop inside the card */}
         <div className="absolute inset-0 bg-cloud-pattern opacity-[0.02] pointer-events-none" />
         
-        {/* Seal stamp (Triện Cát Tường) - Quiet Luxury Bordeaux static */}
-        <div className="h-10 w-10 bg-[#5C1D24] border border-[#B3925F]/30 rounded-full flex items-center justify-center shrink-0 shadow-sm relative z-10">
-          <ShoppingBag className="h-4.5 w-4.5 text-[#B3925F]" />
+        {/* Seal stamp (Triện Cát Tường) - Lacquer Crimson */}
+        <div className="h-10 w-10 bg-crimson border border-gold-deep/30 rounded-full flex items-center justify-center shrink-0 shadow-sm relative z-10">
+          <ShoppingBag className="h-4.5 w-4.5 text-gold-soft" />
         </div>
 
         {/* Transaction Text */}
         <div className="flex flex-col gap-0.5 select-none relative z-10">
-          <span className="text-[10px] font-black text-amber-800 uppercase tracking-widest leading-none font-display" style={{ fontFamily: "var(--font-display)" }}>
-            Giao Dịch Cát Tường 🌟
+          <span className="text-[10px] font-sans font-bold uppercase tracking-[0.25em] gold-text leading-none">
+            Giao Dịch Cát Tường ❖
           </span>
-          <p className="text-xs text-slate-700 font-semibold leading-relaxed mt-1">
-            {tx.name} ({tx.location}) vừa đặt mua:
+          <p className="text-xs text-ink/80 font-semibold leading-relaxed mt-1.5">
+            {tx.name} ({tx.location}) vừa thỉnh:
           </p>
-          <p className="text-sm font-extrabold text-slate-900 tracking-wide font-mono mt-0.5">
+          <p className="text-sm font-extrabold text-ink tracking-wide font-mono mt-0.5">
             {tx.phonePrefix}.
-            <span className="text-[#5C1D24] text-[15px] font-black underline decoration-[#B3925F]/30 underline-offset-4">
+            <span className="text-crimson text-[15px] font-black underline decoration-gold-deep/30 underline-offset-4">
               {tx.phoneSuffix}
             </span>
           </p>
-          <span className="text-[9px] text-slate-400 font-medium italic mt-1 self-start">
+          <span className="text-[9px] text-muted-foreground/60 font-medium italic mt-1 self-start">
             {tx.timeAgo}
           </span>
         </div>
@@ -113,7 +109,7 @@ export function AuspiciousNotification() {
             setIsVisible(false)
             setIsDismissed(true)
           }}
-          className="absolute top-2 right-2 text-[#5C1D24]/60 hover:text-[#5C1D24] transition-colors p-1 rounded hover:bg-amber-100/40"
+          className="absolute top-2 right-2 text-crimson/60 hover:text-crimson transition-colors p-1 rounded hover:bg-gold-soft/20"
           aria-label="Close notification"
         >
           <X className="h-3.5 w-3.5" />

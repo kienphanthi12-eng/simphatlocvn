@@ -1,89 +1,55 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Serif+Display:ital,wght@0,400..900;1,400..900&family=Cinzel:wght@400..900&family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap');
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Vietnamese Royal Heritage Theme (Quiet Luxury: Lacquer Bordeaux, White Silk, Champagne Gold, Jade) */
-  --background: #FBF9F6;
-  --foreground: #2D2725;
-  --card: #FFFFFF;
-  --card-foreground: #2D2725;
-  --popover: #FFFFFF;
-  --popover-foreground: #2D2725;
-  --primary: #5C1D24;
-  --primary-foreground: #FFFDF9;
-  --secondary: #B3925F;
-  --secondary-foreground: #2D2725;
-  --muted: #FBF9F6;
-  --muted-foreground: #6B7280;
-  --accent: #8C6D41;
-  --accent-foreground: #FFFDF9;
+  /* Asian Royal Heritage oklch design tokens */
+  --crimson-deep: oklch(0.28 0.14 25);
+  --crimson: oklch(0.42 0.18 25);
+  --gold-deep: oklch(0.55 0.13 75);
+  --gold: oklch(0.78 0.15 82);
+  --gold-soft: oklch(0.88 0.09 88);
+  --ink: oklch(0.15 0.02 30);
+  --parchment: oklch(0.95 0.025 80);
+
+  /* Map standard tokens for component backward compatibility */
+  --background: var(--parchment);
+  --foreground: var(--ink);
+  --card: var(--parchment);
+  --card-foreground: var(--ink);
+  --popover: var(--parchment);
+  --popover-foreground: var(--ink);
+  --primary: var(--crimson);
+  --primary-foreground: var(--gold-soft);
+  --secondary: var(--gold-deep);
+  --secondary-foreground: var(--ink);
+  --muted: var(--parchment);
+  --muted-foreground: oklch(0.5 0.05 60);
+  --accent: var(--gold);
+  --accent-foreground: var(--crimson-deep);
   --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: rgba(179, 146, 95, 0.18);
-  --input: rgba(179, 146, 95, 0.12);
-  --ring: #B3925F;
-  --chart-1: #5C1D24;
-  --chart-2: #B3925F;
-  --chart-3: #115E59;
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
+  --destructive-foreground: oklch(0.95 0.025 80);
+  --border: rgba(85, 75, 60, 0.15);
+  --input: rgba(85, 75, 60, 0.1);
+  --ring: var(--gold-deep);
   --radius: 0.5rem;
-  --sidebar: #FFFDF9;
-  --sidebar-foreground: #2D2725;
-  --sidebar-primary: #5C1D24;
-  --sidebar-primary-foreground: #FFFDF9;
-  --sidebar-accent: #FBF9F6;
-  --sidebar-accent-foreground: #5C1D24;
-  --sidebar-border: rgba(179, 146, 95, 0.1);
-  --sidebar-ring: #B3925F;
-  --success: #115E59;
-  --success-foreground: #FFFDF9;
-
-  /* Backward Compatibility */
-  --brand: #5C1D24;
-  --brand-hover: #451217;
-  --brand-light: #FAF6F5;
-}
-
-.dark {
-  --background: #120D0C;
-  --foreground: #FFFDF9;
-  --card: #1D1514;
-  --card-foreground: #FFFDF9;
-  --popover: #120D0C;
-  --popover-foreground: #FFFDF9;
-  --primary: #EF4444;
-  --primary-foreground: #FFFDF9;
-  --secondary: #F59E0B;
-  --secondary-foreground: #1E293B;
-  --muted: #1D1514;
-  --muted-foreground: #94A3B8;
-  --accent: #F59E0B;
-  --accent-foreground: #FFFDF9;
-  --destructive: oklch(0.396 0.141 25.723);
-  --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: rgba(245, 158, 11, 0.2);
-  --input: rgba(245, 158, 11, 0.15);
-  --ring: #F59E0B;
-  --sidebar: #1D1514;
-  --sidebar-foreground: #FFFDF9;
-  --sidebar-primary: #EF4444;
-  --sidebar-primary-foreground: #FFFDF9;
-  --sidebar-accent: #120D0C;
-  --sidebar-accent-foreground: #EF4444;
-  --sidebar-border: rgba(245, 158, 11, 0.15);
-  --sidebar-ring: #F59E0B;
-  --success: #10B981;
-  --success-foreground: #FFFDF9;
 }
 
 @theme inline {
-  --font-sans: 'Outfit', 'Inter', 'Geist', 'Geist Fallback', system-ui, sans-serif;
-  --font-display: 'Playfair Display', 'Barlow Condensed', 'Barlow Condensed Fallback', serif;
-  --font-mono: 'Geist Mono', 'Geist Mono Fallback', monospace;
+  --font-sans: 'Be Vietnam Pro', system-ui, sans-serif;
+  --font-serif: 'Noto Serif Display', 'Cinzel', serif;
+  --font-display: 'ZCOOL XiaoWei', 'Noto Serif Display', 'Cinzel', serif;
+
+  --color-crimson-deep: var(--crimson-deep);
+  --color-crimson: var(--crimson);
+  --color-gold-deep: var(--gold-deep);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-ink: var(--ink);
+  --color-parchment: var(--parchment);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -98,35 +64,14 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-success: var(--success);
-  --color-success-foreground: var(--success-foreground);
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-
-  /* Thêm brand colors để tương thích ngược */
-  --color-brand: var(--brand);
-  --color-brand-hover: var(--brand-hover);
-  --color-brand-light: var(--brand-light);
 }
 
 @layer base {
@@ -136,29 +81,114 @@
   body {
     @apply bg-background text-foreground;
   }
+  h1, h2, h3, h4, h5, h6 {
+    letter-spacing: 0.02em;
+  }
 }
 
-/* Quiet Luxury Vietnamese Heritage Premium Styles */
-.bg-parchment {
-  background-color: #FBF9F6;
+/* Custom Visual Utilities & Animations */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
 }
 
-.bg-cloud-pattern {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cg fill='%23b3925f' fill-opacity='0.007'%3E%3Cpath d='M20 50c0-6 5-11 11-11s11 5 11 11c0 .8-.1 1.6-.3 2.4 2.1-.3 4.3 1 4.3 3.6 0 2.8-2.2 5-5 5H23c-2.8 0-5-2.2-5-5 0-2.6 2.2-3.9 4.3-3.6-.2-.8-.3-1.6-.3-2.4zm80 80c0-6 5-11 11-11s11 5 11 11c0 .8-.1 1.6-.3 2.4 2.1-.3 4.3 1 4.3 3.6 0 2.8-2.2 5-5 5H83c-2.8 0-5-2.2-5-5 0-2.6 2.2-3.9 4.3-3.6-.2-.8-.3-1.6-.3-2.4z'/%3E%3C/g%3E%3C/svg%3E");
+@keyframes float-rotate {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(2deg);
+  }
 }
 
-.border-gold-scroll {
-  border: 1px solid rgba(179, 146, 95, 0.2);
+.text-gold-shimmer {
+  background: linear-gradient(90deg, #b8860b, #f5d76e, #fff3b0, #b8860b);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 6s linear infinite;
 }
 
-.bg-gold-gradient {
-  background: #B3925F;
+.ornate-divider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 2.5rem 0;
+}
+.ornate-divider::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-deep), transparent);
+  z-index: 1;
+}
+.ornate-divider::after {
+  content: "❖";
+  position: relative;
+  background-color: var(--parchment);
+  color: var(--gold-deep);
+  padding: 0 1rem;
+  font-size: 0.875rem;
+  z-index: 2;
 }
 
-.bg-burgundy-gradient {
-  background: #5C1D24;
+.corner-ornament {
+  position: relative;
+}
+.corner-ornament::before,
+.corner-ornament::after {
+  content: "";
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-color: var(--gold-deep);
+  border-style: solid;
+  pointer-events: none;
+  z-index: 10;
+}
+.corner-ornament::before {
+  top: 0;
+  left: 0;
+  border-width: 2px 0 0 2px;
+}
+.corner-ornament::after {
+  bottom: 0;
+  right: 0;
+  border-width: 0 2px 2px 0;
 }
 
-.text-gold-gradient {
-  color: #B3925F;
+.lacquer {
+  background: linear-gradient(135deg, var(--crimson-deep), var(--crimson));
+  color: var(--gold-soft);
+}
+
+.gold-text {
+  color: var(--gold-deep);
+}
+
+.bg-pattern {
+  background-image: radial-gradient(circle, var(--gold) 8%, var(--crimson) 10%);
+}
+
+.animate-float {
+  animation: float-rotate 8s ease-in-out infinite;
+}
+
+.border-imperial {
+  border: 1px solid var(--gold-deep);
+  box-shadow: 
+    inset 0 0 0 3px var(--parchment),
+    inset 0 0 0 4px var(--gold-deep),
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Subway Oriental cloud/wave background subtle pattern */
+.bg-oriental-subtle {
+  background-image: url("/oriental-pattern.jpg");
+  background-repeat: repeat;
 }
