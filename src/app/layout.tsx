@@ -5,6 +5,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { ZaloButton } from "@/components/ui/ZaloButton";
 import { cn } from "@/lib/utils";
+import { Analytics } from '@vercel/analytics/next';
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'})
 
@@ -34,6 +35,7 @@ export default function RootLayout({
         </main>
         <Footer />
         <ZaloButton />
+        <Analytics />
       </body>
     </html>
   );
