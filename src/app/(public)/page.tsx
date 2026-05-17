@@ -44,7 +44,7 @@ export default async function HomePage() {
         <div className="absolute inset-0 z-0">
           <img
             src="/dragon-phoenix-hero.jpg"
-            alt="Long Phụng Hoàng Gia"
+            alt="SIM Phát Lộc - Hoàng Gia Cát Tường"
             className="w-full h-full object-cover"
           />
           {/* Imperial Crimson deep-to-soft gradient overlay */}
@@ -63,16 +63,16 @@ export default async function HomePage() {
         <div className="mx-auto max-w-5xl px-4 relative z-20 space-y-6">
           <div className="inline-block border border-gold/60 px-4 py-1.5 rounded bg-crimson-deep/40">
             <span className="text-[10px] uppercase tracking-[0.4em] text-gold font-sans font-bold leading-none">
-              Long Phụng Hòa Minh – Cát Tường Như Ý
+              Phát Lộc Hưng Thịnh – Cát Tường Như Ý
             </span>
           </div>
 
           <h1 className="text-6xl md:text-8xl lg:text-9xl text-gold-shimmer font-display font-black leading-none py-2" style={{ fontFamily: "var(--font-display)" }}>
-            龍鳳呈祥
+            發祿吉祥
           </h1>
 
           <p className="text-2xl md:text-3xl font-serif italic text-gold-soft tracking-widest">
-            Long Phụng Hội Tụ
+            Phát Lộc Cát Tường
           </p>
 
           <p className="max-w-2xl mx-auto text-sm md:text-base text-gold-soft/80 leading-relaxed font-sans font-medium">

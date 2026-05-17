@@ -56,8 +56,8 @@ export default function Header() {
           </div>
           <div className="flex flex-col justify-center">
             <div className="flex items-baseline gap-1.5">
-              <span className="text-2xl md:text-3xl font-display font-black text-crimson" style={{ fontFamily: "var(--font-display)" }}>龍鳳</span>
-              <span className="text-sm md:text-base font-serif font-black tracking-wide text-crimson group-hover:text-gold-deep transition-colors duration-300" style={{ fontFamily: "var(--font-serif)" }}>Long Phụng</span>
+              <span className="text-2xl md:text-3xl font-display font-black text-crimson" style={{ fontFamily: "var(--font-display)" }}>發祿</span>
+              <span className="text-sm md:text-base font-serif font-black tracking-wide text-crimson group-hover:text-gold-deep transition-colors duration-300" style={{ fontFamily: "var(--font-serif)" }}>SIM Phát Lộc</span>
             </div>
             <p className="text-[10px] text-gold-deep font-sans font-bold uppercase tracking-[0.22em] mt-1 leading-none">
               Sim Phong Thủy

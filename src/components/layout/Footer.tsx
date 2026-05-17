@@ -16,7 +16,7 @@ export default function Footer() {
                 <img src="/logo.png" alt="Sim Phát Lộc Logo" className="h-full w-full object-cover scale-[1.05]" />
               </div>
               <h3 className="text-xl font-black text-gold-soft font-display tracking-wide" style={{ fontFamily: "var(--font-display)" }}>
-                <span className="text-gold">Long</span> Phụng
+                <span className="text-gold">SIM</span> Phát Lộc
               </h3>
             </div>
             <p className="text-xs leading-relaxed text-gold-soft/60 font-medium">
@@ -70,7 +70,7 @@ export default function Footer() {
         <div className="ornate-divider" />
 
         <div className="pt-2 text-center text-xs text-gold-soft/40 font-medium font-sans uppercase tracking-[0.2em]">
-          <p>© {new Date().getFullYear()} Long Phụng Sim Phong Thủy - Hoàng Gia Di Sản. Bảo lưu mọi quyền.</p>
+          <p>© {new Date().getFullYear()} SIM Phát Lộc - Hoàng Gia Di Sản. Bảo lưu mọi quyền.</p>
         </div>
       </div>
     </footer>
