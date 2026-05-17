@@ -1,7 +1,8 @@
 import { useState } from "react"
 import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 import { formatPrice } from "@/lib/utils"
-import { getDiemLabel, getNguhanhInfo, type NguHanh } from "@/lib/phongthuy"
+import { getDiemLabel, getNguhanhInfo, type NguHanh, GIO_SINH_OPTIONS } from "@/lib/phongthuy"
 import { Badge } from "@/components/ui/Badge"
 import { ChevronDown, ChevronUp, Sparkles, Compass, CheckCircle2, AlertTriangle, HelpCircle } from "lucide-react"
 
@@ -91,6 +92,61 @@ export function PhongThuySimRow({ sim }: { sim: SimPhongThuyRow }) {
   const badgeClass = SIM_TYPE_BADGE[sim.type] ?? "bg-gray-50 text-gray-700 border-gray-200"
   const typeLabel = SIM_TYPE_LABEL[sim.type] ?? sim.type
   const isSale = sim.priceOriginal != null && sim.priceOriginal > sim.price
+
+  // AI analysis state & query params reading
+  const searchParams = useSearchParams()
+  const namSinhVal = searchParams.get("namSinh") || ""
+  const gioiTinhVal = searchParams.get("gioiTinh") || "nam"
+  const gioSinhVal = searchParams.get("gioSinh") || ""
+
+  const [aiAnalysis, setAiAnalysis] = useState<string>("")
+  const [isAiLoading, setIsAiLoading] = useState<boolean>(false)
+  const [aiError, setAiError] = useState<string>("")
+
+  const handleAiAnalyze = async () => {
+    if (aiAnalysis || isAiLoading) return
+    setIsAiLoading(true)
+    setAiError("")
+
+    try {
+      const gioSinhLabel = GIO_SINH_OPTIONS.find(o => o.value === gioSinhVal)?.label || "Chưa rõ"
+
+      const res = await fetch("/api/ai/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          phone: sim.phone,
+          namSinh: namSinhVal ? parseInt(namSinhVal) : 1996,
+          gioiTinh: gioiTinhVal,
+          gioSinhLabel,
+          diem: sim.diem,
+          nguhanhSim: sim.nguhanhLabel,
+          cungMenh: nhInfo.label,
+          queDich: sim.queDich,
+          duNien: sim.duNien
+        }),
+      })
+
+      const data = await res.json()
+      if (res.ok && data.analysis) {
+        setMessagesAndAnalysis(data.analysis)
+      } else {
+        throw new Error(data.error || "Không thể tải luận giải từ Thần AI.")
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        setAiError(err.message)
+      } else {
+        setAiError("Lỗi hệ thống khi luận quẻ.")
+      }
+    } finally {
+      setIsAiLoading(false)
+    }
+  }
+
+  const setMessagesAndAnalysis = (val: string) => {
+    setAiAnalysis(val)
+  }
 
   // Split formatted phone into head and tail
   const parts = sim.phoneFormatted.split(".")
@@ -335,6 +391,65 @@ export function PhongThuySimRow({ sim }: { sim: SimPhongThuyRow }) {
               </div>
 
             </div>
+
+            {/* AI Custom Analysis Scroll */}
+            <div className="mt-6 border-t border-amber-200/40 pt-6">
+              <div className="max-w-4xl mx-auto bg-white/95 border-2 border-dashed border-amber-600/35 rounded-2xl p-6 relative overflow-hidden shadow-sm backdrop-blur-xs">
+                {/* Ancient watermarks/patterns */}
+                <div className="absolute inset-0 bg-cloud-pattern opacity-[0.02] pointer-events-none" />
+                <div className="absolute top-2 left-2 w-4 h-4 border-t border-l border-amber-600/40 rounded-tl-xs pointer-events-none" />
+                <div className="absolute top-2 right-2 w-4 h-4 border-t border-r border-amber-600/40 rounded-tr-xs pointer-events-none" />
+                <div className="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-amber-600/40 rounded-bl-xs pointer-events-none" />
+                <div className="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-amber-600/40 rounded-br-xs pointer-events-none" />
+
+                <div className="flex flex-col items-center text-center">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Sparkles className="h-4 w-4 text-amber-600 animate-pulse" />
+                    <span className="text-xs font-black uppercase tracking-[0.25em] gold-text">
+                      Hoàng Gia Cát Tường · Thần Khai AI Luận
+                    </span>
+                    <Sparkles className="h-4 w-4 text-amber-600 animate-pulse" />
+                  </div>
+                  
+                  {!aiAnalysis && !isAiLoading && (
+                    <div className="py-4">
+                      <p className="text-xs text-slate-500 mb-4 max-w-lg leading-relaxed font-sans font-medium">
+                        Khai mở mệnh lý bản mệnh của chủ nhân sinh năm {namSinhVal || "1996"}. Yêu cầu Thầy AI Phong Thủy gieo quẻ dịch lý hoàng gia và viết thư pháp luận giải cát tường cho số sim này!
+                      </p>
+                      <button
+                        onClick={handleAiAnalyze}
+                        className="lacquer border border-gold-deep px-6 py-2.5 rounded-xl text-[10px] font-sans font-extrabold uppercase tracking-[0.2em] shadow-md hover:scale-[1.03] transition-all cursor-pointer text-gold-soft"
+                      >
+                        ✦ Xin Thần AI Luận Quẻ ✦
+                      </button>
+                    </div>
+                  )}
+
+                  {isAiLoading && (
+                    <div className="py-6 flex flex-col items-center gap-3">
+                      <div className="w-8 h-8 border-2 border-gold-deep border-t-transparent rounded-full animate-spin" />
+                      <p className="text-xs uppercase tracking-[0.25em] gold-text font-bold animate-pulse">
+                        Đang gieo quẻ luận cát hung…
+                      </p>
+                    </div>
+                  )}
+
+                  {aiError && (
+                    <div className="py-2 text-xs text-red-600 font-semibold">
+                      ⚠ {aiError}
+                      <button onClick={handleAiAnalyze} className="underline ml-2 text-amber-800 font-bold hover:text-red-800">Thử lại</button>
+                    </div>
+                  )}
+
+                  {aiAnalysis && (
+                    <div className="text-left py-2 font-serif text-sm text-ink leading-relaxed whitespace-pre-line border-t border-amber-200/20 mt-3 pt-4 w-full px-2 max-h-[350px] overflow-y-auto">
+                      {aiAnalysis}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
           </td>
         </tr>
       )}
