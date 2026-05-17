@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/db"
-import { SimStatus, Prisma } from "@prisma/client"
+import { Prisma } from "@prisma/client"
 import {
   tinhDiemPhongThuy,
   getBanMenh,
@@ -34,8 +34,8 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    // Build Prisma where with proper enum types
-    const where: Prisma.SimWhereInput = { status: SimStatus.AVAILABLE }
+    // Build Prisma where — do NOT filter by status here (column is text, not PG enum)
+    const where: Prisma.SimWhereInput = {}
     if (filterType) where.type = filterType as Prisma.SimWhereInput["type"]
     if (minPriceStr || maxPriceStr) {
       where.price = {}
@@ -43,7 +43,9 @@ export async function GET(req: NextRequest) {
       if (maxPriceStr) (where.price as Prisma.IntFilter).lte = parseInt(maxPriceStr)
     }
 
-    const allSims = await prisma.sim.findMany({ where })
+    // Fetch all, then filter AVAILABLE in JS (same pattern as /sims/page.tsx)
+    const rawSims = await prisma.sim.findMany({ where })
+    const allSims = rawSims.filter(s => s.status === 'AVAILABLE')
 
     // Tính điểm và enrich data
     let enriched = allSims.map((sim) => {
