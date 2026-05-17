@@ -18,6 +18,13 @@ interface PhongThuySidebarProps {
     total: number
     namSinh: number
   } | null
+  initialValues?: {
+    namSinh?: string
+    ngaySinh?: string
+    thangSinh?: string
+    gioiTinh?: string
+    gioSinh?: string
+  }
 }
 
 const days = Array.from({ length: 31 }, (_, i) => i + 1)
@@ -40,15 +47,15 @@ const NGUHANH_OPTIONS = [
   { value: "Tho", label: "Thổ" },
 ]
 
-export function PhongThuySidebar({ onSearch, isLoading, metaInfo }: PhongThuySidebarProps) {
+export function PhongThuySidebar({ onSearch, isLoading, metaInfo, initialValues }: PhongThuySidebarProps) {
   const [activeTab, setActiveTab] = useState<"tuoi" | "sim">("tuoi")
 
-  // Tab Theo tuoi
-  const [gioSinh, setGioSinh] = useState("")
-  const [ngaySinh, setNgaySinh] = useState("")
-  const [thangSinh, setThangSinh] = useState("")
-  const [namSinh, setNamSinh] = useState("")
-  const [gioiTinh, setGioiTinh] = useState<"nam" | "nu">("nam")
+  // Tab Theo tuoi — khởi tạo từ initialValues nếu có
+  const [gioSinh, setGioSinh] = useState(initialValues?.gioSinh ?? "")
+  const [ngaySinh, setNgaySinh] = useState(initialValues?.ngaySinh ?? "")
+  const [thangSinh, setThangSinh] = useState(initialValues?.thangSinh ?? "")
+  const [namSinh, setNamSinh] = useState(initialValues?.namSinh ?? "")
+  const [gioiTinh, setGioiTinh] = useState<"nam" | "nu">((initialValues?.gioiTinh as "nam" | "nu") ?? "nam")
 
   // Tab Xem phong thuy sim
   const [soSimInput, setSoSimInput] = useState("")

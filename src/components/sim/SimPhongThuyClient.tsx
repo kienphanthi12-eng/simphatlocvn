@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect } from "react"
+import { useSearchParams } from "next/navigation"
 import { ArrowUpDown, Compass, ChevronDown, ChevronUp, Filter } from "lucide-react"
 import { PhongThuySidebar } from "@/components/sim/PhongThuySidebar"
 import { PhongThuySimRow } from "@/components/sim/PhongThuySimRow"
@@ -105,6 +106,7 @@ function SkeletonRow() {
 }
 
 export function SimPhongThuyClient() {
+  const searchParams = useSearchParams()
   const [results, setResults] = useState<SimResult[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [hasSearched, setHasSearched] = useState(false)
@@ -119,6 +121,15 @@ export function SimPhongThuyClient() {
   const [sort, setSort] = useState("diem_desc")
   const [lastParams, setLastParams] = useState<Record<string, string>>({})
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false)
+
+  // Đọc initial values từ URL params (truyền từ trang chủ)
+  const initialValues = {
+    namSinh: searchParams.get("namSinh") ?? "",
+    ngaySinh: searchParams.get("ngaySinh") ?? "",
+    thangSinh: searchParams.get("thangSinh") ?? "",
+    gioiTinh: searchParams.get("gioiTinh") ?? "nam",
+    gioSinh: searchParams.get("gioSinh") ?? "",
+  }
 
   const doSearch = useCallback(async (params: Record<string, string>, page = 1, sortVal = sort) => {
     setIsLoading(true)
@@ -155,6 +166,21 @@ export function SimPhongThuyClient() {
     }
   }, [sort])
 
+  // Tự động tìm kiếm khi có params từ trang chủ
+  useEffect(() => {
+    if (initialValues.namSinh) {
+      doSearch({
+        namSinh: initialValues.namSinh,
+        ngaySinh: initialValues.ngaySinh,
+        thangSinh: initialValues.thangSinh,
+        gioiTinh: initialValues.gioiTinh,
+        gioSinh: initialValues.gioSinh,
+        page: "1",
+      }, 1, sort)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const handleSearch = (params: Record<string, string>) => {
     doSearch(params, 1, sort)
   }
@@ -180,6 +206,7 @@ export function SimPhongThuyClient() {
           onSearch={handleSearch}
           isLoading={isLoading}
           metaInfo={metaInfo}
+          initialValues={initialValues}
         />
       </div>
 
@@ -200,6 +227,7 @@ export function SimPhongThuyClient() {
               onSearch={(p) => { handleSearch(p); setMobileFilterOpen(false) }}
               isLoading={isLoading}
               metaInfo={metaInfo}
+              initialValues={initialValues}
             />
           </div>
         )}
