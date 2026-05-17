@@ -34,18 +34,20 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    // Build Prisma where — do NOT filter by status here (column is text, not PG enum)
+    // Build Prisma where — do NOT filter enums (status/type are text in DB, not PG enums)
     const where: Prisma.SimWhereInput = {}
-    if (filterType) where.type = filterType as Prisma.SimWhereInput["type"]
     if (minPriceStr || maxPriceStr) {
       where.price = {}
       if (minPriceStr) (where.price as Prisma.IntFilter).gte = parseInt(minPriceStr)
       if (maxPriceStr) (where.price as Prisma.IntFilter).lte = parseInt(maxPriceStr)
     }
 
-    // Fetch all, then filter AVAILABLE in JS (same pattern as /sims/page.tsx)
+    // Fetch all, filter AVAILABLE + type in JS (same pattern as /sims/page.tsx)
     const rawSims = await prisma.sim.findMany({ where })
-    const allSims = rawSims.filter(s => s.status === 'AVAILABLE')
+    let allSims = rawSims.filter(s => s.status === 'AVAILABLE')
+    if (filterType && filterType !== 'all') {
+      allSims = allSims.filter(s => s.type === filterType)
+    }
 
     // Tính điểm và enrich data
     let enriched = allSims.map((sim) => {
