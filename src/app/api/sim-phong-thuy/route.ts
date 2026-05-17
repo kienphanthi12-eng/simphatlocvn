@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/db"
+import { SimStatus, Prisma } from "@prisma/client"
 import {
   tinhDiemPhongThuy,
   getBanMenh,
@@ -33,13 +34,13 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    // Build Prisma where
-    const where: Record<string, unknown> = { status: "AVAILABLE" }
-    if (filterType) where.type = filterType
+    // Build Prisma where with proper enum types
+    const where: Prisma.SimWhereInput = { status: SimStatus.AVAILABLE }
+    if (filterType) where.type = filterType as Prisma.SimWhereInput["type"]
     if (minPriceStr || maxPriceStr) {
       where.price = {}
-      if (minPriceStr) (where.price as Record<string, number>).gte = parseInt(minPriceStr)
-      if (maxPriceStr) (where.price as Record<string, number>).lte = parseInt(maxPriceStr)
+      if (minPriceStr) (where.price as Prisma.IntFilter).gte = parseInt(minPriceStr)
+      if (maxPriceStr) (where.price as Prisma.IntFilter).lte = parseInt(maxPriceStr)
     }
 
     const allSims = await prisma.sim.findMany({ where })
