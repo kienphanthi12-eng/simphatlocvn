@@ -8,8 +8,11 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatPhone(phone: string): string {
-  if (phone.length !== 10) return phone;
-  return `${phone.slice(0, 4)} ${phone.slice(4, 7)} ${phone.slice(7)}`;
+  const clean = phone.replace(/\D/g, '')
+  if (clean.length === 10) {
+    return `${clean.slice(0,4)}.${clean.slice(4,7)}.${clean.slice(7)}`
+  }
+  return phone
 }
 
 export function formatPrice(price: number): string {
@@ -34,7 +37,7 @@ export function getSimTypeLabel(type: SimType): string {
     LAP_KEP: "Lặp Kép",
     THAN_TAI: "Thần Tài",
     ONG_DIA: "Ông Địa",
-    VIP: "VIP",
+    VIP: "Sim VIP",
     KHAC: "Khác",
   };
   return labels[type] || "Khác";
