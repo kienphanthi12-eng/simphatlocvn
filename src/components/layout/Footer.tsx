@@ -11,9 +11,14 @@ export default function Footer() {
           
           {/* Cột 1 */}
           <div className="space-y-4">
-            <h3 className="text-2xl font-black text-white font-display tracking-wide" style={{ fontFamily: "var(--font-display)" }}>
-              <span className="text-[#B3925F]">Sim</span> Phát Lộc
-            </h3>
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 shrink-0 rounded-lg overflow-hidden border border-[#B3925F]/40 shadow-xs bg-[#5C1D24] flex items-center justify-center">
+                <img src="/logo.png" alt="Sim Phát Lộc Logo" className="h-full w-full object-cover scale-[1.05]" />
+              </div>
+              <h3 className="text-2xl font-black text-white font-display tracking-wide" style={{ fontFamily: "var(--font-display)" }}>
+                <span className="text-[#B3925F]">Sim</span> Phát Lộc
+              </h3>
+            </div>
             <p className="text-xs leading-relaxed text-slate-400 font-medium">
               Chuyên cung cấp sim Vinaphone số đẹp toàn quốc. Hàng ngàn sim cát tường hợp phong thủy, mang lại may mắn, lộc phát và sự thịnh vượng bền vững cho gia chủ.
             </p>

@@ -51,11 +51,8 @@ export default function Header() {
       <div className="mx-auto max-w-7xl flex items-center justify-between px-4 py-3 gap-4">
         {/* Imperial Seal Logo */}
         <Link href="/" className="flex items-center gap-3 shrink-0">
-          <div className="h-11 w-11 bg-[#5C1D24] flex items-center justify-center shrink-0 rounded-lg relative border border-[#B3925F]">
-            {/* Elegant inner square borders representing a Royal Seal */}
-            <div className="absolute inset-0.5 border border-[#B3925F]/30 rounded-xs pointer-events-none" />
-            {/* Royal Gold Crest Emblem - Quiet Luxury static */}
-            <Sparkles className="h-5 w-5 text-[#B3925F]" />
+          <div className="h-11 w-11 shrink-0 rounded-lg overflow-hidden border border-[#B3925F]/50 shadow-xs relative bg-[#5C1D24] flex items-center justify-center">
+            <img src="/logo.png" alt="Sim Phát Lộc Logo" className="h-full w-full object-cover scale-[1.05]" />
           </div>
           <div>
             <h1 className="text-2xl font-black text-[#5C1D24] leading-tight font-display tracking-wide" style={{ fontFamily: "var(--font-display)" }}>
