@@ -25,15 +25,40 @@ const typeColorMap: Record<string, string> = {
 export function SimCard({ sim }: SimCardProps) {
   const isSale = sim.priceOriginal && sim.priceOriginal > sim.price;
   const badgeColor = typeColorMap[sim.type] ?? "bg-primary/10 text-primary border-primary/20";
+  
+  let discountPercent = 0;
+  if (isSale && sim.priceOriginal) {
+    discountPercent = Math.round((1 - sim.price / sim.priceOriginal) * 100);
+  }
+
+  const formattedParts = formatPhone(sim.phone).split('.');
 
   return (
     <TableRow className="group border-b border-border last:border-b-0 cursor-pointer hover:bg-blue-50/50 transition-colors duration-150">
       {/* Số điện thoại */}
       <TableCell className="py-4 px-4">
-        <Link href={`/sims/${sim.phone}`} className="block">
-          <span className="font-mono text-base font-bold tracking-wide text-foreground group-hover:text-primary transition-colors" style={{ fontFamily: 'var(--font-display)' }}>
-            {formatPhone(sim.phone)}
+        <Link href={`/sims/${sim.phone}`} className="flex items-center gap-2">
+          <span className="font-mono tracking-wide transition-colors" style={{ fontFamily: 'var(--font-display)' }}>
+            {formattedParts.length === 3 ? (
+              <>
+                <span className="font-semibold text-foreground/80 group-hover:text-primary/80 text-base">
+                  {formattedParts[0]}.{formattedParts[1]}.
+                </span>
+                <span className="font-extrabold text-primary group-hover:text-primary text-[17px]">
+                  {formattedParts[2]}
+                </span>
+              </>
+            ) : (
+              <span className="font-bold text-base text-foreground group-hover:text-primary">
+                {formatPhone(sim.phone)}
+              </span>
+            )}
           </span>
+          {discountPercent > 0 && (
+            <Badge className="bg-red-500 hover:bg-red-600 text-white border-transparent px-1.5 py-0 h-5 text-[10px] font-bold shadow-sm shrink-0">
+              -{discountPercent}%
+            </Badge>
+          )}
         </Link>
       </TableCell>
 
@@ -64,7 +89,7 @@ export function SimCard({ sim }: SimCardProps) {
       <TableCell className="text-center w-[110px] py-4 px-4">
         <Link
           href={`/checkout?phone=${sim.phone}`}
-          className="bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm px-5 py-2 rounded-lg shadow-md hover:shadow-lg transition-all whitespace-nowrap"
+          className="bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm px-5 py-2 rounded-lg shadow-md hover:shadow-lg transition-all whitespace-nowrap inline-block"
         >
           Đặt mua
         </Link>
