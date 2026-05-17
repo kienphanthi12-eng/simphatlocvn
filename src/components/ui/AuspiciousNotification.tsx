@@ -78,15 +78,14 @@ export function AuspiciousNotification() {
           : "translate-y-12 opacity-0 scale-95 pointer-events-none"
       }`}
     >
-      {/* Parchment scroll card with double gold borders */}
-      <div className="bg-[#FAF9F6] border-double border-4 border-amber-500/35 rounded-xl shadow-lg relative p-4 pr-9 flex gap-3 overflow-hidden">
+      {/* Quiet Luxury clean card with 1px gold outline */}
+      <div className="bg-[#FBF9F6] border border-[#E5DCCB] rounded-xl shadow-md relative p-4 pr-9 flex gap-3 overflow-hidden">
         {/* Subtle cloud backdrop inside the card */}
         <div className="absolute inset-0 bg-cloud-pattern opacity-[0.02] pointer-events-none" />
         
-        {/* Seal stamp (Triện Cát Tường) */}
-        <div className="h-10 w-10 bg-red-700 border border-amber-400/40 rounded-full flex items-center justify-center shrink-0 shadow-sm relative relative-z-10 animate-pulse">
-          <div className="absolute inset-0.5 border border-dashed border-amber-300/30 rounded-full pointer-events-none" />
-          <ShoppingBag className="h-4.5 w-4.5 text-amber-200" />
+        {/* Seal stamp (Triện Cát Tường) - Quiet Luxury Bordeaux static */}
+        <div className="h-10 w-10 bg-[#5C1D24] border border-[#B3925F]/30 rounded-full flex items-center justify-center shrink-0 shadow-sm relative z-10">
+          <ShoppingBag className="h-4.5 w-4.5 text-[#B3925F]" />
         </div>
 
         {/* Transaction Text */}
@@ -99,7 +98,7 @@ export function AuspiciousNotification() {
           </p>
           <p className="text-sm font-extrabold text-slate-900 tracking-wide font-mono mt-0.5">
             {tx.phonePrefix}.
-            <span className="text-red-700 text-[15px] font-black underline decoration-amber-500/30 underline-offset-4">
+            <span className="text-[#5C1D24] text-[15px] font-black underline decoration-[#B3925F]/30 underline-offset-4">
               {tx.phoneSuffix}
             </span>
           </p>
@@ -114,7 +113,7 @@ export function AuspiciousNotification() {
             setIsVisible(false)
             setIsDismissed(true)
           }}
-          className="absolute top-2 right-2 text-amber-700/60 hover:text-red-800 transition-colors p-1 rounded hover:bg-amber-100/40"
+          className="absolute top-2 right-2 text-[#5C1D24]/60 hover:text-[#5C1D24] transition-colors p-1 rounded hover:bg-amber-100/40"
           aria-label="Close notification"
         >
           <X className="h-3.5 w-3.5" />
