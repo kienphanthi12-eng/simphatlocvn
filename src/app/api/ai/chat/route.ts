@@ -21,21 +21,21 @@ export async function POST(req: NextRequest) {
       .slice(0, 5)
 
     const simListContext = recommendedSims
-      .map(s => `- Số: ${s.phone} | Giá: ${s.price.toLocaleString("vi-VN")}đ | Thể loại: ${s.type}`)
+      .map(s => `- Số: ${s.phone}`)
       .join("\n")
 
-    const systemPrompt = `Bạn là "Thầy Phong Thủy AI" - Trợ lý tư vấn phong thủy hoàng gia độc quyền của thương hiệu "Sim Phát Lộc" (simphatloc.vn).
-Nhiệm vụ của bạn là tư vấn sim số đẹp, tính điểm cát hung, luận giải vận mệnh, ngũ hành, quẻ Kinh Dịch và Du Niên một cách uyên bác, trang trọng và tôn kính.
+    const systemPrompt = `Bạn là "Thầy Phong Thủy AI" - Bậc Thầy Dịch Lý & Phong Thủy Hoàng Gia của thương hiệu "Sim Phát Lộc" (simphatloc.vn).
+Nhiệm vụ của bạn là xem mệnh lý, luận giải cát hung quẻ dịch và gợi ý cát số hộ mệnh cho gia chủ một cách uyên bác, thâm sâu và tôn kính nhất.
 
-VĂN PHONG VÀ QUY TẮC ỨNG XỬ:
-1. Xưng hô: Gọi người dùng là "Quý chủ nhân" hoặc "Quý khách", xưng là "Lão phu" hoặc "Thầy Phong Thủy AI".
-2. Giọng điệu: Uy nghiêm, sâu sắc, lễ độ, mang đậm phong thái của một bậc thầy dịch lý cổ xưa tại Việt Nam. Sử dụng các từ ngữ Hán Việt cát tường hợp lý (ví dụ: cát tường như ý, đại cát đại lợi, hanh thông, sinh khí, chiêu tài,...).
-3. Kiến thức phong thủy: Thấu hiểu Ngũ hành (Kim - Mộc - Thủy - Hỏa - Thổ) tương sinh tương khắc, Bát Quái Kinh Dịch (64 quẻ dịch), Bát tinh Du Niên (Sinh Khí, Thiên Y, Diên Niên, Phục Vị là tốt; Tuyệt Mệnh, Lục Sát, Ngũ Quỷ, Họa Hại là xấu).
-4. Thực tế kinh doanh: Gợi ý các sim thực tế đang bán từ danh sách sim hiện có dưới đây khi Quý chủ nhân muốn tìm sim. ĐỪNG tự bịa ra số điện thoại không có trong danh sách này nếu họ hỏi mua:
-Danh sách sim hiện có trong kho:
-${simListContext}
+VĂN PHONG VÀ NGUYÊN TẮC QUAN TRỌNG:
+1. TUYỆT ĐỐI KHÔNG xưng hô hay nói chuyện như một nhân viên bán hàng (seller) thông thường. Lão phu không được báo giá tiền (ví dụ: 1.500.000đ) hay phân tích các danh mục khô khan (ví dụ: "thể loại Thần Tài"). Thay vào đó, hãy nói về số sim như những "Bảo số trợ mệnh", "Pháp bảo phong thủy" được khai quang tài lộc.
+2. Xưng hô: Gọi người dùng là "Quý chủ nhân" hoặc "Quý khách", xưng là "Lão phu" hoặc "Thầy Phong Thủy AI". Giọng văn uy nghiêm, đĩnh đạc, thâm trầm, đậm chất cổ phong truyền thống Việt Nam.
+3. Dẫn link thỉnh sim trực tiếp: Khi giới thiệu bất cứ bảo số nào cho gia chủ, hãy lồng ghép đường link đặt mua trực tiếp bằng cú pháp Markdown chuẩn sau đây để gia chủ thỉnh sim lập tức:
+👉 **[Thỉnh bảo số 0915.456.379](/checkout?phone=0915456379)** (Nhớ bỏ dấu chấm trong tham số phone ở đường dẫn).
+4. Tính tương tác & Gợi mở: Đừng trả lời một chiều. Lão phu luôn luôn phải đặt ra những câu hỏi tương tác tinh tế ở cuối câu để tìm hiểu sâu hơn về Bát Tự của Quý chủ nhân. Hãy hỏi về ngày tháng năm sinh âm lịch, giờ sinh (Tý, Sửu, Dần...), hoặc hỏi xem gia chủ đang muốn tập trung kích hoạt cung vị nào: Cung Tài Lộc (kinh doanh), Cung Quan Lộc (sự nghiệp), hay Cung Gia Đạo (tình duyên, gia quyến).
 
-5. Nếu người dùng hỏi các câu hỏi không liên quan đến phong thủy hoặc chọn sim, hãy khéo léo dẫn dắt họ quay lại chủ đề phong thủy hoàng gia và chọn sim cát tường để kích hoạt vận may.`
+Danh sách bảo số cát tường hiện có trong kho:
+${simListContext}`
 
     if (apiKey) {
       // Gọi API DeepSeek thật
@@ -73,32 +73,31 @@ ${simListContext}
 
     if (input.includes("1996") || input.includes("bính tý")) {
       reply = `Chào Quý chủ nhân Bính Tý 1996. Bản mệnh của chủ nhân thuộc **Giản Hạ Thủy** (Nước dưới khe).
-Để gia tăng cát khí, Lão phu khuyên chủ nhân nên lựa chọn các số sim có hành **Kim** (Kim sinh Thủy - tương sinh tuyệt đối) hoặc hành **Thủy** (bình hòa bổ trợ). 
-- Các con số cát tường cho mệnh Thủy: **1, 6, 7**. Tránh con số thuộc hành Thổ tương khắc như **0, 2, 5, 8**.
-Lão phu xin đề xuất một số sim cát tường Thủy/Kim đang có sẵn trong kho:
-${recommendedSims.slice(0, 3).map(s => `✦ **${s.phone}** (${s.price.toLocaleString("vi-VN")}đ - Thể loại: ${s.type})`).join("\n")}
-Chúc Quý chủ nhân sớm thỉnh được linh số hộ thân!`
+Để gia tăng cát khí, Lão phu khuyên chủ nhân nên lựa chọn các cát số thuộc hành **Kim** (Kim sinh Thủy - tương sinh tuyệt đối) hoặc hành **Thủy** (bình hòa bổ trợ) để làm hộ thân bảo số.
+Lão phu xin kính dâng các bảo số cát tường trợ mệnh đang có trong kho:
+${recommendedSims.slice(0, 3).map(s => `👉 **[Thỉnh bảo số ${s.phone.slice(0, 4)}.${s.phone.slice(4, 7)}.${s.phone.slice(7)}](/checkout?phone=${s.phone})**`).join("\n")}
+
+Quý chủ nhân sinh vào tháng nào âm lịch và đang muốn mưu cầu điều chi cho cung mệnh của mình?`
     } else if (input.includes("tài lộc") || input.includes("lộc phát") || input.includes("thần tài") || input.includes("kinh doanh")) {
-      reply = `Kính thưa Quý khách, trong dịch học cổ xưa, cầu tài lộc, chiêu tài tiến bảo là nguyện vọng vô cùng chính đáng.
-Để kích hoạt cung tài lộc, chủ nhân nên sở hữu các dòng sim cát tường như:
-- **Sim Lộc Phát (đuôi 68, 86)**: Chiêu tài đón lộc, công việc buôn bán hanh thông cát lợi.
-- **Sim Thần Tài (đuôi 39, 79)**: Được thần tài gõ cửa gia trì, quý nhân phù trợ trong kinh doanh.
-Lão phu xin đề xuất một số bảo số chiêu tài đang hiện hữu trong kho:
-${recommendedSims.slice(0, 3).map(s => `✦ **${s.phone}** (${s.price.toLocaleString("vi-VN")}đ)`).join("\n")}
-Quý khách có thể bấm trực tiếp vào phần đặt mua số sim này để thỉnh vận may cát tường!`
+      reply = `Kính thưa Quý khách, trong dịch học cổ xưa, chiêu tài tiến bảo, đón rước lộc tài là nguyện vọng vô cùng chính đáng của gia chủ.
+Để kích hoạt cung tài lộc mạnh mẽ, Lão phu khuyên chủ nhân nên thỉnh các linh số cát tường mang năng lượng Lộc Phát hoặc Thần Tài đắc cát.
+Lão phu xin kính dâng các pháp bảo số cát tường chiêu tài đang có trong tầm tay:
+${recommendedSims.slice(0, 3).map(s => `👉 **[Thỉnh bảo số ${s.phone.slice(0, 4)}.${s.phone.slice(4, 7)}.${s.phone.slice(7)}](/checkout?phone=${s.phone})**`).join("\n")}
+
+Quý khách hiện đang kinh doanh lĩnh vực nào và muốn tập trung cầu Tài Lộc thăng tiến hay Cầu Gia Đạo bình an?`
     } else if (input.includes("mệnh hỏa") || input.includes("mệnh thổ") || input.includes("mệnh kim") || input.includes("mệnh mộc") || input.includes("mệnh thủy")) {
       const menh = input.includes("hỏa") ? "Hỏa" : input.includes("thổ") ? "Thổ" : input.includes("kim") ? "Kim" : input.includes("mộc") ? "Mộc" : "Thủy"
       const sinh = menh === "Hỏa" ? "Mộc (Mộc sinh Hỏa)" : menh === "Thổ" ? "Hỏa (Hỏa sinh Thổ)" : menh === "Kim" ? "Thổ (Thổ sinh Kim)" : menh === "Mộc" ? "Thủy (Thủy sinh Mộc)" : "Kim (Kim sinh Thủy)"
       
-      reply = `Quý khách thuộc mệnh **${menh}**. Theo thuyết âm dương ngũ hành hoàng gia, chủ nhân nên dùng sim thuộc hành **${sinh.split(" ")[0]}** để được tương sinh bổ trợ tối đa.
-Lão phu khuyên chủ nhân nên chú trọng các con số đại cát của bản mệnh và tránh các số tương khắc hình hại.
-Lão phu xin kính dâng các linh số cát tường trợ mệnh đang có trong tầm tay quý khách:
-${recommendedSims.slice(0, 2).map(s => `✦ **${s.phone}** (${s.price.toLocaleString("vi-VN")}đ)`).join("\n")}
-Hãy chọn một linh số đắc lực nhất để khai mở cung mệnh hoàng kim!`
+      reply = `Quý khách thuộc mệnh **${menh}**. Theo dịch học ngũ hành hoàng gia, chủ nhân nên thỉnh pháp bảo số thuộc hành **${sinh.split(" ")[0]}** để được tương sinh, hộ mệnh đắc lực nhất.
+Lão phu xin kính dâng các linh số cát tường trợ mệnh đang có trong kho:
+${recommendedSims.slice(0, 2).map(s => `👉 **[Thỉnh bảo số ${s.phone.slice(0, 4)}.${s.phone.slice(4, 7)}.${s.phone.slice(7)}](/checkout?phone=${s.phone})**`).join("\n")}
+
+Quý chủ nhân sinh năm bao nhiêu âm lịch để Lão phu có thể lập quẻ dịch chi tiết cát hung trợ duyên cho bạn?`
     } else {
-      reply = `Kính chào Quý chủ nhân ghé thăm **Sim Phát Lộc**. Lão phu là Thầy Phong Thủy AI, được thừa hưởng tri thức dịch lý ngàn năm để trợ duyên cho chủ nhân tìm kiếm linh số hộ mệnh.
-Quý khách có thể chia sẻ cho Lão phu biết **Năm sinh âm lịch**, **Giới tính** hoặc **Nguyện vọng tài lộc (kinh doanh, gia đạo, thăng tiến...)**, Lão phu sẽ lập tức bấm quẻ cát hung, tìm ra số điện thoại tương sinh đắc lực nhất cho chủ nhân!
-Chúc Quý chủ nhân vạn sự hanh thông, đại cát đại lợi!`
+      reply = `Kính chào Quý chủ nhân ghé thăm **Sim Phát Lộc**. Lão phu là Thầy Phong Thủy AI, được thừa hưởng tri thức dịch lý ngàn năm để trợ duyên cho chủ nhân tìm kiếm linh số trợ mệnh.
+Quý chủ nhân có thể chia sẻ cho Lão phu biết **Năm sinh âm lịch**, **Giới tính** hoặc **Nguyện vọng cuộc sống (Kinh doanh tài lộc, Quan lộc thăng tiến hay Tình duyên gia đạo)**? 
+Lão phu sẽ lập tức bấm quẻ dịch, tìm ra pháp bảo số đắc cát nhất cho chủ nhân!`
     }
 
     return NextResponse.json({ reply })

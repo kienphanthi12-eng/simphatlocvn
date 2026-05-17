@@ -8,6 +8,37 @@ interface Message {
   content: string
 }
 
+const parseMessageContent = (content: string) => {
+  const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g
+  const parts = []
+  let lastIndex = 0
+  let match
+
+  while ((match = linkRegex.exec(content)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(content.slice(lastIndex, match.index))
+    }
+    const label = match[1]
+    const url = match[2]
+    parts.push(
+      <a
+        key={match.index}
+        href={url}
+        className="text-[#7F1D1D] hover:text-[#991B1B] font-bold underline transition-colors mx-0.5"
+      >
+        {label}
+      </a>
+    )
+    lastIndex = linkRegex.lastIndex
+  }
+
+  if (lastIndex < content.length) {
+    parts.push(content.slice(lastIndex))
+  }
+
+  return parts.length > 0 ? parts : content
+}
+
 export function PhongThuyChatbot() {
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
@@ -20,6 +51,27 @@ export function PhongThuyChatbot() {
   const [isLoading, setIsLoading] = useState(false)
   
   const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  // Load chat history from sessionStorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const saved = sessionStorage.getItem("spl_ai_chat_history")
+      if (saved) {
+        try {
+          setMessages(JSON.parse(saved))
+        } catch (e) {
+          console.error("Error loading chat history:", e)
+        }
+      }
+    }
+  }, [])
+
+  // Save chat history to sessionStorage
+  useEffect(() => {
+    if (typeof window !== "undefined" && messages.length > 0) {
+      sessionStorage.setItem("spl_ai_chat_history", JSON.stringify(messages))
+    }
+  }, [messages])
 
   const quickPrompts = [
     "🔮 Mệnh Hỏa hợp số nào?",
@@ -158,7 +210,7 @@ export function PhongThuyChatbot() {
                       : "bg-white/95 text-ink border border-gold-deep/15 leading-relaxed font-sans font-medium whitespace-pre-line"
                   }`}
                 >
-                  {msg.content}
+                  {msg.role === "assistant" ? parseMessageContent(msg.content) : msg.content}
                 </div>
               </div>
             ))}
