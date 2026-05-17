@@ -95,11 +95,11 @@ export default async function HomePage() {
       {/* Mobile Sidebar Floating Button */}
       <div className="lg:hidden fixed bottom-6 right-6 z-50">
         <Sheet>
-          <SheetTrigger asChild>
+          <SheetTrigger render={
             <button className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/30">
               <Filter size={24} />
             </button>
-          </SheetTrigger>
+          } />
           <SheetContent side="left" className="w-[280px] p-0 border-r-0">
             <div className="h-full overflow-y-auto p-4 bg-background">
               <Suspense fallback={<div className="w-full min-h-[400px] rounded-lg border border-border bg-card p-4 animate-pulse" />}>

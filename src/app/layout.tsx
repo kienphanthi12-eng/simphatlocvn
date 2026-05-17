@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { ZaloButton } from "@/components/ui/ZaloButton";
+import { AuspiciousNotification } from "@/components/ui/AuspiciousNotification";
 import { cn } from "@/lib/utils";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'})
@@ -34,6 +35,7 @@ export default function RootLayout({
         </main>
         <Footer />
         <ZaloButton />
+        <AuspiciousNotification />
       </body>
     </html>
   );
