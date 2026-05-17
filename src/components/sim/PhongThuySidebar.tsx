@@ -63,6 +63,8 @@ export function PhongThuySidebar({ onSearch, isLoading, metaInfo }: PhongThuySid
     if (!namSinh) return
     onSearch({
       namSinh,
+      ngaySinh,
+      thangSinh,
       gioSinh,
       gioiTinh,
       filterScore,
@@ -77,6 +79,7 @@ export function PhongThuySidebar({ onSearch, isLoading, metaInfo }: PhongThuySid
     if (!soSimInput || !namSinh) return
     onSearch({
       namSinh,
+      gioiTinh,
       soSim: soSimInput.replace(/\D/g, ""),
       filterScore,
       filterType,
@@ -136,7 +139,7 @@ export function PhongThuySidebar({ onSearch, isLoading, metaInfo }: PhongThuySid
               {/* Giờ sinh */}
               <div className="space-y-1">
                 <Label className="text-xs">Giờ sinh</Label>
-                <Select value={gioSinh} onValueChange={setGioSinh}>
+                <Select value={gioSinh} onValueChange={(val) => setGioSinh(val || "")}>
                   <SelectTrigger className="h-9 text-xs bg-muted/40">
                     <SelectValue placeholder="Chọn giờ sinh" />
                   </SelectTrigger>
@@ -154,7 +157,7 @@ export function PhongThuySidebar({ onSearch, isLoading, metaInfo }: PhongThuySid
               <div className="space-y-1">
                 <Label className="text-xs">Ngày sinh (dương lịch)</Label>
                 <div className="grid grid-cols-3 gap-1.5">
-                  <Select value={ngaySinh} onValueChange={setNgaySinh}>
+                  <Select value={ngaySinh} onValueChange={(val) => setNgaySinh(val || "")}>
                     <SelectTrigger className="h-9 text-xs bg-muted/40">
                       <SelectValue placeholder="Ngày" />
                     </SelectTrigger>
@@ -165,7 +168,7 @@ export function PhongThuySidebar({ onSearch, isLoading, metaInfo }: PhongThuySid
                     </SelectContent>
                   </Select>
 
-                  <Select value={thangSinh} onValueChange={setThangSinh}>
+                  <Select value={thangSinh} onValueChange={(val) => setThangSinh(val || "")}>
                     <SelectTrigger className="h-9 text-xs bg-muted/40">
                       <SelectValue placeholder="Tháng" />
                     </SelectTrigger>
@@ -176,7 +179,7 @@ export function PhongThuySidebar({ onSearch, isLoading, metaInfo }: PhongThuySid
                     </SelectContent>
                   </Select>
 
-                  <Select value={namSinh} onValueChange={setNamSinh}>
+                  <Select value={namSinh} onValueChange={(val) => setNamSinh(val || "")}>
                     <SelectTrigger className="h-9 text-xs bg-muted/40">
                       <SelectValue placeholder="Năm" />
                     </SelectTrigger>
@@ -243,7 +246,7 @@ export function PhongThuySidebar({ onSearch, isLoading, metaInfo }: PhongThuySid
               </div>
               <div className="space-y-1">
                 <Label className="text-xs">Năm sinh của bạn</Label>
-                <Select value={namSinh} onValueChange={setNamSinh}>
+                <Select value={namSinh} onValueChange={(val) => setNamSinh(val || "")}>
                   <SelectTrigger className="h-9 text-xs bg-muted/40">
                     <SelectValue placeholder="Chọn năm sinh" />
                   </SelectTrigger>
@@ -276,7 +279,7 @@ export function PhongThuySidebar({ onSearch, isLoading, metaInfo }: PhongThuySid
           {/* Điểm PT */}
           <div className="space-y-1">
             <Label className="text-xs">Điểm phong thủy</Label>
-            <Select value={filterScore} onValueChange={setFilterScore}>
+            <Select value={filterScore} onValueChange={(val) => setFilterScore(val || "")}>
               <SelectTrigger className="h-9 text-xs bg-muted/40">
                 <SelectValue placeholder="Tất cả điểm" />
               </SelectTrigger>
@@ -293,7 +296,7 @@ export function PhongThuySidebar({ onSearch, isLoading, metaInfo }: PhongThuySid
           {/* Loại sim */}
           <div className="space-y-1">
             <Label className="text-xs">Loại sim</Label>
-            <Select value={filterType} onValueChange={setFilterType}>
+            <Select value={filterType} onValueChange={(val) => setFilterType(val || "")}>
               <SelectTrigger className="h-9 text-xs bg-muted/40">
                 <SelectValue placeholder="Tất cả loại" />
               </SelectTrigger>

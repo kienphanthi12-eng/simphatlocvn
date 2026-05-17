@@ -22,6 +22,21 @@ interface SimResult {
   price: number
   priceOriginal: number | null
   discountPercent: number | null
+  breakdown?: {
+    amDuongScore: number
+    nguHanhScore: number
+    queDichScore: number
+    duNienScore: number
+    luckyTailScore: number
+    totalScore: number
+    amDuongText: string
+    nguHanhText: string
+    queDichText: string
+    duNienText: string
+    luckyTailText: string
+  }
+  duNien?: { pair: string; star: string; label: string; type: "tot" | "xau" | "trungtinh"; desc: string }[]
+  queDich?: { upperTrigram: string; lowerTrigram: string; hexagramIndex: number; hexagramName: string; hexagramViet: string; type: "tot" | "xau" | "binh"; desc: string }
 }
 
 interface ApiResponse {
@@ -159,18 +174,23 @@ export function SimPhongThuyClient() {
         {/* Toolbar */}
         {hasSearched && (
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-card border border-border rounded-xl px-4 py-3">
-            <p className="text-sm font-medium text-muted-foreground">
-              {isLoading ? "Đang tìm kiếm..." : (
+            <p className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+              {isLoading ? (
+                <>
+                  <Compass className="h-4 w-4 animate-spin text-[#1a56db]" />
+                  <span>Đang tầm long chấm điểm phong thủy...</span>
+                </>
+              ) : (
                 <>
                   Tìm thấy{" "}
-                  <span className="font-bold text-foreground">{metaInfo?.total ?? 0}</span>{" "}
+                  <span className="font-bold text-[#1a56db]">{metaInfo?.total ?? 0}</span>{" "}
                   sim phong thủy phù hợp
                 </>
               )}
             </p>
             <div className="flex items-center gap-2">
               <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
-              <Select value={sort} onValueChange={handleSortChange}>
+              <Select value={sort} onValueChange={(val) => handleSortChange(val || "")}>
                 <SelectTrigger className="w-[180px] h-9 text-sm bg-muted/40">
                   <SelectValue />
                 </SelectTrigger>

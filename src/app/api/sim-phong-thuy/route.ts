@@ -2,11 +2,13 @@ import { NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/db"
 import { Prisma } from "@prisma/client"
 import {
-  tinhDiemPhongThuy,
+  tinhDiemPhongThuyChiTiet,
   getBanMenh,
   getCungMenh,
   getNguhanhSim,
   getNguhanhLabel,
+  getDuNien,
+  getQueDich,
   type NguHanh,
 } from "@/lib/phongthuy"
 import { formatPhone } from "@/lib/utils"
@@ -33,25 +35,54 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Năm sinh không hợp lệ" }, { status: 400 })
   }
 
-  try {
-    // Build Prisma where — do NOT filter enums (status/type are text in DB, not PG enums)
-    const where: Prisma.SimWhereInput = {}
-    if (minPriceStr || maxPriceStr) {
-      where.price = {}
-      if (minPriceStr) (where.price as Prisma.IntFilter).gte = parseInt(minPriceStr)
-      if (maxPriceStr) (where.price as Prisma.IntFilter).lte = parseInt(maxPriceStr)
-    }
+  const soSim = searchParams.get("soSim")?.replace(/\D/g, "")
 
-    // Fetch all, filter AVAILABLE + type in JS (same pattern as /sims/page.tsx)
-    const rawSims = await prisma.sim.findMany({ where })
-    let allSims = rawSims.filter(s => s.status === 'AVAILABLE')
-    if (filterType && filterType !== 'all') {
-      allSims = allSims.filter(s => s.type === filterType)
+  try {
+    let allSims: Array<{ id: string; phone: string; type: string; price: number; priceOriginal: number | null; status: string; featured: boolean }> = []
+
+    if (soSim) {
+      // Tìm trong DB xem số này có bán không
+      const found = await prisma.sim.findFirst({
+        where: {
+          phone: {
+            contains: soSim
+          }
+        }
+      })
+      if (found) {
+        allSims = [found]
+      } else {
+        // Tạo một số ảo để chấm điểm phong thủy (không bán)
+        allSims = [{
+          id: "custom",
+          phone: soSim,
+          type: "KHAC",
+          price: 0,
+          priceOriginal: null,
+          status: "NOT_FOR_SALE",
+          featured: false
+        }]
+      }
+    } else {
+      // Build Prisma where
+      const where: Prisma.SimWhereInput = {}
+      if (minPriceStr || maxPriceStr) {
+        where.price = {}
+        if (minPriceStr) (where.price as Prisma.IntFilter).gte = parseInt(minPriceStr)
+        if (maxPriceStr) (where.price as Prisma.IntFilter).lte = parseInt(maxPriceStr)
+      }
+
+      // Fetch all, filter AVAILABLE + type in JS
+      const rawSims = await prisma.sim.findMany({ where })
+      allSims = rawSims.filter(s => s.status === 'AVAILABLE')
+      if (filterType && filterType !== 'all') {
+        allSims = allSims.filter(s => s.type === filterType)
+      }
     }
 
     // Tính điểm và enrich data
     let enriched = allSims.map((sim) => {
-      const diem = tinhDiemPhongThuy(sim.phone, namSinh)
+      const breakdown = tinhDiemPhongThuyChiTiet(sim.phone, namSinh, gioiTinh)
       const nguhanhSim = getNguhanhSim(sim.phone)
       const phone = sim.phone.replace(/\D/g, "")
       const phoneTail = phone.slice(-3)
@@ -68,7 +99,10 @@ export async function GET(req: NextRequest) {
         type: sim.type,
         nguhanh: nguhanhSim,
         nguhanhLabel: getNguhanhLabel(nguhanhSim),
-        diem,
+        diem: breakdown.totalScore,
+        breakdown, // Gửi chi tiết chấm điểm về client
+        duNien: getDuNien(sim.phone),
+        queDich: getQueDich(sim.phone),
         price: sim.price,
         priceOriginal: sim.priceOriginal,
         discountPercent,

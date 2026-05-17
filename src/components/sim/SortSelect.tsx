@@ -22,7 +22,7 @@ export function SortSelect() {
   }
 
   return (
-    <Select value={currentSort} onValueChange={handleSortChange}>
+    <Select value={currentSort} onValueChange={(val) => handleSortChange(val || "newest")}>
       <SelectTrigger className="w-[180px] bg-white">
         <SelectValue placeholder="Sắp xếp" />
       </SelectTrigger>
