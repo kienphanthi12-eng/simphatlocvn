@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { Sparkles, ChevronRight } from "lucide-react"
+import { Suspense } from "react"
 import { SimPhongThuyClient } from "@/components/sim/SimPhongThuyClient"
 
 export const metadata: Metadata = {
@@ -15,9 +16,7 @@ export default function SimPhongThuyPage() {
     <>
       {/* Hero Banner */}
       <div className="bg-gradient-to-r from-[#7F1D1D] to-[#991B1B] relative overflow-hidden border-b-2 border-amber-500/25 shadow-sm">
-        {/* Subtle traditional clouds watermark pattern inside the banner */}
         <div className="absolute inset-0 bg-cloud-pattern opacity-[0.03] pointer-events-none" />
-        {/* Decorative elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-10 -right-10 w-48 h-48 bg-amber-500/[0.03] rounded-full blur-xl" />
           <div className="absolute top-4 right-24 w-24 h-24 bg-amber-500/[0.03] rounded-full blur-md" />
@@ -38,7 +37,6 @@ export default function SimPhongThuyPage() {
             </div>
           </div>
 
-          {/* Quick stats */}
           <div className="flex flex-wrap gap-4 mt-6">
             {[
               { label: "Sim hợp mệnh", value: "5.000+" },
@@ -63,9 +61,20 @@ export default function SimPhongThuyPage() {
         </div>
       </div>
 
-      {/* Page Content */}
+      {/* Page Content — Suspense required for useSearchParams() */}
       <div className="bg-background min-h-screen py-6">
-        <SimPhongThuyClient />
+        <Suspense
+          fallback={
+            <div className="flex justify-center items-center min-h-[400px]">
+              <div className="text-center space-y-3">
+                <div className="w-10 h-10 border-2 border-gold-deep border-t-transparent rounded-full animate-spin mx-auto" />
+                <p className="text-xs uppercase tracking-[0.3em] gold-text">Đang khai quẻ…</p>
+              </div>
+            </div>
+          }
+        >
+          <SimPhongThuyClient />
+        </Suspense>
       </div>
     </>
   )
