@@ -51,13 +51,13 @@ export function AdminSidebar() {
             <Link
               key={item.name}
               href={item.href}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition ${
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ease-out transform active:scale-95 ${
                 isActive 
-                  ? "bg-[#0066CC] text-white" 
-                  : "text-gray-400 hover:bg-gray-800 hover:text-white"
+                  ? "bg-[#0066CC] text-white shadow-md shadow-[#0066CC]/20 translate-x-1" 
+                  : "text-gray-400 hover:bg-gray-800 hover:text-white hover:translate-x-1"
               }`}
             >
-              <item.icon size={20} />
+              <item.icon size={20} className={`transition-transform duration-300 ${isActive ? "scale-110" : ""}`} />
               <span className="font-medium">{item.name}</span>
             </Link>
           )
@@ -67,7 +67,7 @@ export function AdminSidebar() {
       <div className="p-4 border-t border-gray-800">
         <button 
           onClick={handleLogout}
-          className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-red-500/10 hover:text-red-500 transition w-full text-left"
+          className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-red-500/10 hover:text-red-500 transition-all duration-300 ease-out transform active:scale-95 hover:translate-x-1 w-full text-left cursor-pointer"
         >
           <LogOut size={20} />
           <span className="font-medium">Đăng xuất</span>
