@@ -15,37 +15,47 @@ export default function SimPhongThuyPage() {
   return (
     <>
       {/* Hero Banner */}
-      <div className="bg-gradient-to-r from-[#7F1D1D] to-[#991B1B] relative overflow-hidden border-b-2 border-amber-500/25 shadow-sm">
-        <div className="absolute inset-0 bg-cloud-pattern opacity-[0.03] pointer-events-none" />
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-10 -right-10 w-48 h-48 bg-amber-500/[0.03] rounded-full blur-xl" />
-          <div className="absolute top-4 right-24 w-24 h-24 bg-amber-500/[0.03] rounded-full blur-md" />
-          <div className="absolute -bottom-8 -left-8 w-40 h-40 bg-amber-500/[0.03] rounded-full blur-lg" />
+      <div className="lacquer relative overflow-hidden border-b-4 border-gold-deep shadow-2xl">
+        <div className="absolute inset-0 bg-oriental-subtle opacity-20 pointer-events-none mix-blend-color-burn" />
+        <div className="absolute inset-0 flex justify-center opacity-10 pointer-events-none mix-blend-overlay">
+          <img src="/royal_decorations.png" alt="" className="h-full object-cover scale-150" />
         </div>
-        <div className="relative mx-auto max-w-7xl px-6 py-12 z-10">
-          <div className="flex items-center gap-4.5 mb-3">
-            <div className="h-11 w-11 bg-amber-500/20 border border-amber-400/40 rounded-xl flex items-center justify-center shadow-inner">
-              <Sparkles className="h-5 w-5 text-amber-300 animate-pulse" />
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-gold-deep/10 to-transparent" />
+          <div className="absolute -top-10 -right-10 w-48 h-48 bg-gold/10 rounded-full blur-xl" />
+          <div className="absolute -bottom-8 -left-8 w-40 h-40 bg-gold/10 rounded-full blur-lg" />
+        </div>
+        
+        <div className="relative mx-auto max-w-7xl px-6 py-12 lg:py-16 z-10 flex flex-col md:flex-row items-center justify-between gap-10">
+          <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left gap-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gold-deep/15 border border-gold-deep/30 mb-2 backdrop-blur-sm">
+              <Sparkles className="h-3 w-3 text-gold" />
+              <span className="text-[10px] font-sans font-bold uppercase tracking-[0.25em] text-gold-soft">Tính điểm Kinh Dịch hoàng gia</span>
             </div>
-            <div>
-              <h1 className="text-2xl md:text-3xl font-black text-white tracking-wide font-display" style={{ fontFamily: "var(--font-display)" }}>
-                Sim Phong Thủy Vinaphone
-              </h1>
-              <p className="text-amber-100/90 text-sm mt-0.5 font-medium">
-                Tìm sim hợp mệnh theo ngày sinh — Tính điểm phong thủy tự động
-              </p>
-            </div>
+            
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-white tracking-wide text-gold-shimmer font-serif drop-shadow-md" style={{ fontFamily: "var(--font-serif)" }}>
+              Sim Phong Thủy Vinaphone
+            </h1>
+            
+            <p className="text-gold-soft/90 text-sm md:text-base font-medium max-w-xl leading-relaxed mt-2">
+              Tầm long khai bản mệnh. Tra cứu ngay sim Vinaphone hợp phong thủy theo ngày sinh để kích hoạt vượng khí, rước lộc chiêu tài.
+            </p>
           </div>
 
-          <div className="flex flex-wrap gap-4 mt-6">
+          <div className="flex flex-row md:flex-col justify-center gap-3 w-full md:w-auto shrink-0 flex-wrap">
             {[
-              { label: "Sim hợp mệnh", value: "5.000+" },
-              { label: "Loại phong thủy", value: "12 loại" },
-              { label: "Điểm tối đa", value: "10/10" },
+              { label: "Kho sim hợp mệnh", value: "5.000+" },
+              { label: "Bảng luận phong thủy", value: "12 Loại" },
+              { label: "Chuẩn điểm đại cát", value: "10/10" },
             ].map(stat => (
-              <div key={stat.label} className="bg-amber-950/20 border border-amber-500/25 rounded-xl px-5 py-2.5 text-white text-center min-w-[110px] shadow-inner backdrop-blur-xs">
-                <p className="text-xl font-black font-mono leading-none tracking-wide text-amber-300">{stat.value}</p>
-                <p className="text-[10px] text-amber-200/90 font-bold uppercase tracking-wider mt-1">{stat.label}</p>
+              <div key={stat.label} className="flex-1 md:flex-none flex items-center gap-4 bg-crimson-deep/40 border border-gold-deep/30 rounded-xl px-4 md:px-6 py-3 shadow-inner backdrop-blur-sm group hover:bg-gold-deep/15 transition-all cursor-default">
+                <div className="hidden sm:flex h-10 w-10 shrink-0 rounded-full bg-gold-deep/20 items-center justify-center border border-gold-deep/40 group-hover:scale-110 group-hover:bg-gold-deep/40 transition-all duration-300">
+                  <span className="text-sm font-black text-gold">✦</span>
+                </div>
+                <div className="text-center sm:text-left w-full">
+                  <p className="text-lg md:text-xl font-black font-sans leading-none tracking-wide text-white drop-shadow-sm">{stat.value}</p>
+                  <p className="text-[9px] md:text-[10px] text-gold-soft/80 font-bold uppercase tracking-widest mt-1.5">{stat.label}</p>
+                </div>
               </div>
             ))}
           </div>
