@@ -32,18 +32,80 @@ const NGUHANH_DISPLAY: Record<NguHanh, { label: string; color: string; bgColor: 
   Tho: { label: "Thổ", color: "#92400e", bgColor: "#fef3c7" },
 }
 
-/** Trả về ngũ hành bản mệnh theo năm sinh dương lịch */
+/** Trả về ngũ hành bản mệnh theo năm sinh dương lịch (Lục Thập Hoa Giáp - Mệnh Nạp Âm chuẩn xác) */
 export function getBanMenh(namSinh: number): NguHanh {
-  const idx = (namSinh - 4) % 10
-  const normalIdx = idx < 0 ? idx + 10 : idx
-  return BAN_MENH_MAP[normalIdx] ?? "Tho"
+  // Thiên Can: Giáp/Ất = 1, Bính/Đinh = 2, Mậu/Kỷ = 3, Canh/Tân = 4, Nhâm/Quý = 5
+  const CAN_VALUE: Record<number, number> = {
+    0: 4, 1: 4, // Canh, Tân
+    2: 5, 3: 5, // Nhâm, Quý
+    4: 1, 5: 1, // Giáp, Ất
+    6: 2, 7: 2, // Bính, Đinh
+    8: 3, 9: 3  // Mậu, Kỷ
+  }
+
+  // Địa Chi: Tý/Sửu/Ngọ/Mùi = 0, Dần/Mão/Thân/Dậu = 1, Thìn/Tỵ/Tuất/Hợi = 2
+  const CHI_VALUE: Record<number, number> = {
+    4: 0, 5: 0, 10: 0, 11: 0, // Tý, Sửu, Ngọ, Mùi
+    6: 1, 7: 1, 0: 1, 1: 1,   // Dần, Mão, Thân, Dậu
+    8: 2, 9: 2, 2: 2, 3: 2    // Thìn, Tỵ, Tuất, Hợi
+  }
+
+  const stemVal = CAN_VALUE[namSinh % 10] ?? 1
+  const branchVal = CHI_VALUE[namSinh % 12] ?? 1
+
+  let sum = stemVal + branchVal
+  if (sum > 5) sum = sum - 5
+
+  const elements: Record<number, NguHanh> = {
+    1: "Kim",
+    2: "Thuy",
+    3: "Hoa",
+    4: "Tho",
+    5: "Moc"
+  }
+
+  return elements[sum] ?? "Tho"
 }
 
-/** Trả về tên cung mệnh */
+/** Trả về tên cung mệnh (Bát Trạch Cung Phi chuẩn xác 100% cho Đông Tứ Mệnh / Tây Tứ Mệnh) */
 export function getCungMenh(namSinh: number, gioiTinh: "nam" | "nu" = "nam"): string {
-  // Simplified: dùng năm sinh mod 8 kết hợp giới tính
-  const base = (namSinh + (gioiTinh === "nam" ? 1 : 3)) % 8
-  return CUNG_MENH_NAMES[base] ?? "Khôn"
+  const yy = namSinh % 100
+  let index = 1
+
+  if (namSinh >= 2000) {
+    if (gioiTinh === "nam") {
+      index = (99 - yy) % 9
+    } else {
+      index = (yy + 6) % 9
+    }
+  } else {
+    if (gioiTinh === "nam") {
+      index = (100 - yy) % 9
+    } else {
+      index = (yy + 5) % 9
+    }
+  }
+
+  // index = 0 -> Ly (9)
+  if (index === 0) index = 9
+
+  // Cân bằng Trung Cung (5): Nam quy về Khôn (2), Nữ quy về Cấn (8)
+  if (index === 5) {
+    return gioiTinh === "nam" ? "Khôn" : "Cấn"
+  }
+
+  const mapping: Record<number, string> = {
+    1: "Khảm",
+    2: "Khôn",
+    3: "Chấn",
+    4: "Tốn",
+    6: "Càn",
+    7: "Đoài",
+    8: "Cấn",
+    9: "Ly"
+  }
+
+  return mapping[index] ?? "Khôn"
 }
 
 /** Trả về ngũ hành của sim dựa vào tổng chữ số */
@@ -440,6 +502,15 @@ export function getDiemLabel(diem: number): { label: string; color: string; barC
   if (diem >= 8) return { label: "Cát", color: "text-orange-500", barColor: "bg-orange-500" }
   if (diem >= 7) return { label: "Bình Hòa", color: "text-blue-500", barColor: "bg-blue-500" }
   return { label: "Trung bình", color: "text-gray-500", barColor: "bg-gray-500" }
+}
+
+/** Trả về tên năm Can Chi (ví dụ: "Giáp Thân" cho năm 2004, "Bính Tuất" cho năm 2006) */
+export function getCanChiYear(namSinh: number): string {
+  // CAN: offset +6 vì 1900 % 10 = 0 → Canh (index 6 trong mảng)
+  const canIdx = (namSinh % 10 + 6) % 10
+  // CHI: offset +8 vì 1900 % 12 = 4 → Tý (index 0), công thức: (year%12 + 8) % 12
+  const chiIdx = (namSinh % 12 + 8) % 12
+  return `${NAM_CAN[canIdx]} ${NAM_CHI[chiIdx]}`
 }
 
 /** Tên Việt của ngũ hành */

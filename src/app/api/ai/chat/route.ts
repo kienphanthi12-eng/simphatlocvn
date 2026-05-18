@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/db"
+import { getBanMenh, getNguhanhLabel, getCanChiYear } from "@/lib/phongthuy"
 
 export async function POST(req: NextRequest) {
   try {
@@ -24,6 +25,20 @@ export async function POST(req: NextRequest) {
       .map(s => `- Số: ${s.phone}`)
       .join("\n")
 
+    // Phát hiện năm sinh trong toàn bộ lịch sử hội thoại để cung cấp bản mệnh chính xác cho AI
+    const allText = messages.map((m: { content: string }) => m.content).join(" ")
+    const yearMatch = allText.match(/\b(19[4-9]\d|200\d|201[0-9])\b/)
+    let menhContext = ""
+    if (yearMatch) {
+      const detectedYear = parseInt(yearMatch[1])
+      const detectedMenh = getBanMenh(detectedYear)
+      const detectedMenhLabel = getNguhanhLabel(detectedMenh)
+      const detectedCanChi = getCanChiYear(detectedYear)
+      menhContext = `\n\nTHÔNG TIN BẢN MỆNH ĐÃ XÁC ĐỊNH (TUYỆT ĐỐI DÙNG CHÍNH XÁC, KHÔNG TÍNH LẠI):
+- Năm sinh: ${detectedYear} (${detectedCanChi})
+- Bản mệnh Nạp Âm: ${detectedMenhLabel}`
+    }
+
     const systemPrompt = `Bạn là "Thầy Phong Thủy AI" - Bậc Thầy Dịch Lý & Phong Thủy Hoàng Gia của thương hiệu "Sim Phát Lộc" (simphatloc.vn).
 Nhiệm vụ của bạn là xem mệnh lý, luận giải cát hung quẻ dịch và dẫn dắt khéo léo để gia chủ thỉnh bảo số hộ mệnh phù hợp nhất.
 
@@ -36,6 +51,7 @@ VĂN PHONG VÀ NGUYÊN TẮC BẮT BUỘC:
 3. Tuyệt đối không nói chuyện kiểu nhân viên bán hàng (seller), không báo giá tiền thương mại hay phân tích danh mục khô khan. Hãy gọi sim là "Bảo số trợ mệnh", "Linh số cát tường".
 4. Đường dẫn thỉnh sim trực tiếp: Dùng cú pháp Markdown chuẩn sau đây:
 👉 **[Thỉnh bảo số 0915.456.379](/checkout?phone=0915456379)** (Nhớ bỏ dấu chấm trong tham số phone ở đường dẫn).
+5. KHI KHÁCH NÓI NĂM SINH: Bắt buộc dùng đúng bản mệnh đã được hệ thống cung cấp ở phần THÔNG TIN BẢN MỆNH bên dưới — KHÔNG TỰ TÍNH LẠI từ năm sinh vì có thể sai.${menhContext}
 
 Danh sách bảo số cát tường hiện có trong kho:
 ${simListContext}`
@@ -74,13 +90,28 @@ ${simListContext}`
     const input = lastMessage.toLowerCase()
     let reply = ""
 
-    if (input.includes("1996") || input.includes("bính tý")) {
-      reply = `Chào Quý chủ nhân Bính Tý 1996. Bản mệnh của chủ nhân thuộc **Giản Hạ Thủy** (Nước dưới khe).
-Để gia tăng cát khí, Lão phu khuyên chủ nhân nên lựa chọn các cát số thuộc hành **Kim** (Kim sinh Thủy - tương sinh tuyệt đối) hoặc hành **Thủy** (bình hòa bổ trợ) để làm hộ thân bảo số.
+    // Phát hiện năm sinh trong tin nhắn cuối (ưu tiên) hoặc toàn bộ hội thoại
+    const yearInInput = input.match(/\b(19[4-9]\d|200\d|201[0-9])\b/)
+    if (yearInInput) {
+      const yr = parseInt(yearInInput[1])
+      const menh = getBanMenh(yr)
+      const menhLabel = getNguhanhLabel(menh)
+      const canChi = getCanChiYear(yr)
+      // Ngũ hành tương sinh với bản mệnh
+      const sinhMap: Record<string, string> = {
+        "Kim": "Thổ (Thổ sinh Kim)",
+        "Mộc": "Thủy (Thủy sinh Mộc)",
+        "Thủy": "Kim (Kim sinh Thủy)",
+        "Hỏa": "Mộc (Mộc sinh Hỏa)",
+        "Thổ": "Hỏa (Hỏa sinh Thổ)",
+      }
+      const tuongSinh = sinhMap[menhLabel] ?? "Kim"
+      reply = `Kính thưa Quý chủ nhân tuổi **${canChi} ${yr}**, bản mệnh của chủ nhân thuộc **${menhLabel}**.
+Để gia tăng cát khí, Lão phu khuyên nên thỉnh cát số thuộc hành **${tuongSinh}** làm hộ thân bảo số.
 Lão phu xin kính dâng các bảo số cát tường trợ mệnh đang có trong kho:
 ${recommendedSims.slice(0, 3).map(s => `👉 **[Thỉnh bảo số ${s.phone.slice(0, 4)}.${s.phone.slice(4, 7)}.${s.phone.slice(7)}](/checkout?phone=${s.phone})**`).join("\n")}
 
-Quý chủ nhân sinh vào tháng nào âm lịch và đang muốn mưu cầu điều chi cho cung mệnh của mình?`
+Quý chủ nhân đang muốn mưu cầu điều chi: Tài Lộc, Quan Lộc, hay Gia Đạo?`
     } else if (input.includes("tài lộc") || input.includes("lộc phát") || input.includes("thần tài") || input.includes("kinh doanh")) {
       reply = `Kính thưa Quý khách, trong dịch học cổ xưa, chiêu tài tiến bảo, đón rước lộc tài là nguyện vọng vô cùng chính đáng của gia chủ.
 Để kích hoạt cung tài lộc mạnh mẽ, Lão phu khuyên chủ nhân nên thỉnh các linh số cát tường mang năng lượng Lộc Phát hoặc Thần Tài đắc cát.

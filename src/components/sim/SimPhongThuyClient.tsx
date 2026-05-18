@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useCallback, useEffect } from "react"
-import { useSearchParams } from "next/navigation"
+import { useSearchParams, useRouter, usePathname } from "next/navigation"
 import { ArrowUpDown, Compass, ChevronDown, ChevronUp, Filter } from "lucide-react"
 import { PhongThuySidebar } from "@/components/sim/PhongThuySidebar"
 import { PhongThuySimRow } from "@/components/sim/PhongThuySimRow"
@@ -107,6 +107,8 @@ function SkeletonRow() {
 
 export function SimPhongThuyClient() {
   const searchParams = useSearchParams()
+  const router = useRouter()
+  const pathname = usePathname()
   const [results, setResults] = useState<SimResult[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [hasSearched, setHasSearched] = useState(false)
@@ -143,9 +145,8 @@ export function SimPhongThuyClient() {
       sort: sortVal,
     })
 
-    // Handle "all" values from select
-    if (qs.get("filterScore") === "all") qs.delete("filterScore")
-    if (qs.get("filterType") === "all") qs.delete("filterType")
+    // Đồng bộ URL tham số để các component con nhận giá trị mới chuẩn xác
+    router.replace(`${pathname}?${qs.toString()}`, { scroll: false })
 
     try {
       const res = await fetch(`/api/sim-phong-thuy?${qs.toString()}`)
