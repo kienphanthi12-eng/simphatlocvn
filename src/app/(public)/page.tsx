@@ -139,21 +139,7 @@ export default async function HomePage() {
           <h2 className="text-3xl md:text-4xl font-serif font-black text-crimson mt-2 mb-4">Tuyển Tập Sim Quý</h2>
           <div className="ornate-divider max-w-md mx-auto" />
 
-          {/* Simple Navigation filter buttons */}
-          <div className="flex flex-wrap justify-center gap-2 mt-8">
-            <button className="lacquer border border-gold-deep px-4 py-1.5 rounded-full text-[10px] font-sans font-bold uppercase tracking-[0.15em] shadow-sm">
-              Tất Cả
-            </button>
-            <Link href="/sims?type=TAM_HOA" className="border border-gold-deep/30 bg-parchment text-ink hover:text-crimson px-4 py-1.5 rounded-full text-[10px] font-sans font-bold uppercase tracking-[0.15em] transition-colors">
-              Tam Hoa
-            </Link>
-            <Link href="/sims?type=TU_QUY" className="border border-gold-deep/30 bg-parchment text-ink hover:text-crimson px-4 py-1.5 rounded-full text-[10px] font-sans font-bold uppercase tracking-[0.15em] transition-colors">
-              Tứ Quý
-            </Link>
-            <Link href="/sims?type=LOC_PHAT" className="border border-gold-deep/30 bg-parchment text-ink hover:text-crimson px-4 py-1.5 rounded-full text-[10px] font-sans font-bold uppercase tracking-[0.15em] transition-colors">
-              Lộc Phát
-            </Link>
-          </div>
+
         </div>
 
         {/* Featured Grid */}
