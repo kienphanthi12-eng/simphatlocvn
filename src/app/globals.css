@@ -192,3 +192,12 @@
   background-image: url("/oriental-pattern.jpg");
   background-repeat: repeat;
 }
+
+/* Custom Gradient Utilities */
+.bg-burgundy-gradient {
+  background: linear-gradient(135deg, var(--crimson-deep), var(--crimson)) !important;
+}
+
+.bg-gold-gradient {
+  background: linear-gradient(135deg, var(--gold-deep), var(--gold)) !important;
+}

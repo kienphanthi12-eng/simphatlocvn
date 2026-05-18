@@ -249,7 +249,7 @@ export function SimPhongThuyClient() {
               ) : (
                 <>
                   Tìm thấy{" "}
-                  <span className="font-bold text-[#1a56db]">{metaInfo?.total ?? 0}</span>{" "}
+                  <span className="font-bold text-red-700">{metaInfo?.total ?? 0}</span>{" "}
                   sim phong thủy phù hợp
                 </>
               )}

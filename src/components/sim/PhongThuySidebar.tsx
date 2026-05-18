@@ -210,7 +210,7 @@ export function PhongThuySidebar({ onSearch, isLoading, metaInfo, initialValues 
                         value={gt}
                         checked={gioiTinh === gt}
                         onChange={() => setGioiTinh(gt)}
-                        className="w-3.5 h-3.5 accent-[#1a56db]"
+                        className="w-3.5 h-3.5 accent-red-700"
                       />
                       <span className="text-xs font-medium">{gt === "nam" ? "Nam" : "Nữ"}</span>
                     </label>
@@ -355,21 +355,21 @@ export function PhongThuySidebar({ onSearch, isLoading, metaInfo, initialValues 
 
       {/* Card 3: Thông tin mệnh */}
       {metaInfo && (
-        <div className="bg-card rounded-xl border border-border overflow-hidden shadow-sm">
-          <div className="bg-[#1a56db] text-white px-4 py-3 flex items-center gap-2">
+        <div className="bg-white/95 rounded-2xl border-gold-scroll overflow-hidden shadow-sm">
+          <div className="bg-burgundy-gradient text-white px-4 py-3 flex items-center gap-2 border-b border-red-950/15">
             <User className="h-4 w-4" />
-            <h3 className="font-semibold text-sm">Thông tin mệnh</h3>
+            <h3 className="font-bold text-sm">Thông tin mệnh</h3>
           </div>
-          <div className="p-3 grid grid-cols-2 gap-2">
+          <div className="p-4 grid grid-cols-2 gap-2 bg-amber-50/5">
             {[
               { label: "Năm sinh", value: String(metaInfo.namSinh) },
               { label: "Bản mệnh", value: metaInfo.banMenhLabel },
               { label: "Cung mệnh", value: metaInfo.cungMenh },
               { label: "Sim tìm được", value: `${metaInfo.total} sim` },
             ].map(item => (
-              <div key={item.label} className="bg-blue-50 rounded-lg p-2 text-center">
-                <p className="text-[10px] text-muted-foreground">{item.label}</p>
-                <p className="text-sm font-bold text-[#1a56db] mt-0.5">{item.value}</p>
+              <div key={item.label} className="bg-amber-50/65 border border-amber-200/40 rounded-xl p-2.5 text-center">
+                <p className="text-[10px] font-medium text-amber-900/60">{item.label}</p>
+                <p className="text-sm font-bold text-red-800 mt-0.5">{item.value}</p>
               </div>
             ))}
           </div>
