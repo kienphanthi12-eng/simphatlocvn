@@ -1,11 +1,6 @@
 import type { Metadata } from "next";
 import { Lexend, Barlow_Condensed, Geist } from 'next/font/google'
 import "./globals.css";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-import { ZaloButton } from "@/components/ui/ZaloButton";
-import { AuspiciousNotification } from "@/components/ui/AuspiciousNotification";
-import { PhongThuyChatbot } from "@/components/ui/PhongThuyChatbot";
 import { cn } from "@/lib/utils";
 
 
@@ -31,14 +26,7 @@ export default function RootLayout({
   return (
     <html lang="vi" className={cn("font-sans", geist.variable)}>
       <body className={`${geist.variable} ${barlow.variable} font-sans antialiased bg-background flex flex-col min-h-screen`}>
-        <Header />
-        <main className="flex-grow">
-          {children}
-        </main>
-        <Footer />
-        <ZaloButton />
-        <AuspiciousNotification />
-        <PhongThuyChatbot />
+        {children}
       </body>
     </html>
   );
