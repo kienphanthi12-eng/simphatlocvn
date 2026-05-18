@@ -5,7 +5,7 @@ import { SimCard } from "@/components/ui/SimCard"
 import { PhongThuyFinder } from "@/components/home/PhongThuyFinder"
 
 export default async function HomePage() {
-  const [featuredSims, newestSims] = await Promise.all([
+  const [featuredSims, newestSims, saleSims] = await Promise.all([
     prisma.sim.findMany({
       where: { featured: true },
       take: 6,
@@ -14,6 +14,10 @@ export default async function HomePage() {
     prisma.sim.findMany({
       take: 6,
       orderBy: { createdAt: "desc" }
+    }),
+    prisma.sim.findMany({
+      take: 6,
+      orderBy: { price: "asc" }
     })
   ])
 
@@ -160,7 +164,7 @@ export default async function HomePage() {
         </div>
 
         {/* Newest Grid */}
-        <div>
+        <div className="mb-16">
           <div className="flex items-center justify-between mb-8">
             <h3 className="text-xl font-serif font-black text-ink flex items-center gap-2">
               <span className="h-4 w-1 bg-crimson" /> Sim Mới Nhất
@@ -172,6 +176,29 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {newestSims.map((sim) => (
               <SimCard key={sim.id} sim={sim} view="grid" />
+            ))}
+          </div>
+        </div>
+
+        {/* Promo / Sale Grid */}
+        <div>
+          <div className="flex items-center justify-between mb-8">
+            <h3 className="text-xl font-serif font-black text-ink flex items-center gap-2">
+              <span className="h-4 w-1 bg-amber-500" /> Sim Khuyến Mãi Theo Ngày
+              <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-red-100 text-red-600 animate-pulse border border-red-200">HOT</span>
+            </h3>
+            <Link href="/sims?sort=price_asc" className="text-xs uppercase font-sans tracking-widest font-extrabold gold-text hover:text-crimson transition-colors">
+              Săn sale ngay →
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {saleSims.map((sim) => (
+              <div key={sim.id} className="relative group">
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-amber-500 to-red-500 rounded-2xl blur opacity-30 group-hover:opacity-60 transition duration-1000 group-hover:duration-200"></div>
+                <div className="relative">
+                  <SimCard sim={sim} view="grid" />
+                </div>
+              </div>
             ))}
           </div>
         </div>
