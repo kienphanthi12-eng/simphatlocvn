@@ -204,7 +204,25 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 5. COMMITMENTS SECTION (BỐN LỜI THỆ ƯỚC) */}
+      {/* 5. STATS COUNTER SECTION */}
+      <section className="py-12 max-w-7xl mx-auto px-4 relative z-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[
+            { num: "500+", label: "Đơn hàng hoàn thành", sub: "Khách hài lòng 100%" },
+            { num: "1.200+", label: "Sim số đẹp", sub: "Cập nhật hằng ngày" },
+            { num: "5 năm", label: "Kinh nghiệm", sub: "Chuyên sim Vinaphone" },
+            { num: "100%", label: "Chính hãng", sub: "Vào tên chính chủ" },
+          ].map((stat) => (
+            <div key={stat.num} className="corner-ornament border border-gold-deep/30 bg-parchment/60 rounded-xl p-5 text-center">
+              <div className="text-3xl font-black text-crimson font-serif mb-1">{stat.num}</div>
+              <div className="text-xs font-bold text-ink uppercase tracking-wide leading-tight">{stat.label}</div>
+              <div className="text-[10px] text-muted-foreground mt-0.5">{stat.sub}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 6. COMMITMENTS SECTION (BỐN LỜI THỆ ƯỚC) */}
       <section className="lacquer py-24 relative overflow-hidden border-t border-b border-gold-deep/30">
         {/* Subtle cloud watermark inside commitments */}
         <div className="absolute inset-0 bg-oriental-subtle opacity-10 pointer-events-none z-0" />

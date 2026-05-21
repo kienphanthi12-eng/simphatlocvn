@@ -7,6 +7,9 @@ import { CheckCircle, XCircle, MessageCircle, Info } from "lucide-react"
 import { SimCard } from "@/components/ui/SimCard"
 import { Badge } from "@/components/ui/Badge"
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { TrustBadges } from "@/components/ui/TrustBadges"
+import { ViewingCounter } from "@/components/ui/ViewingCounter"
+import { StickyCTA } from "@/components/ui/StickyCTA"
 
 interface Props {
   params: Promise<{ phone: string }>
@@ -65,7 +68,7 @@ export default async function SimDetailPage({ params }: Props) {
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen py-8">
+    <div className="bg-gray-50 min-h-screen py-8 pb-24 sm:pb-8">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -92,9 +95,13 @@ export default async function SimDetailPage({ params }: Props) {
                 <Badge variant="outline">{getSimTypeLabel(sim.type)}</Badge>
               </div>
               
-              <h1 className="text-5xl md:text-6xl font-black text-[#0066CC] tracking-widest mb-6">
+              <h1 className="text-5xl md:text-6xl font-black text-[#0066CC] tracking-widest mb-4">
                 {formatPhone(sim.phone)}
               </h1>
+
+              <div className="mb-4">
+                <ViewingCounter />
+              </div>
 
               <div className="flex items-end gap-4 mb-8">
                 <span className="text-3xl font-bold text-gray-900">{formatPrice(sim.price)}</span>
@@ -115,7 +122,7 @@ export default async function SimDetailPage({ params }: Props) {
 
               <div className="flex flex-col sm:flex-row gap-4 w-full">
                 {isAvailable ? (
-                  <Link 
+                  <Link
                     href={`/checkout?phone=${sim.phone}`}
                     className="flex-1 flex items-center justify-center gap-2 bg-[var(--blue-500)] text-white px-[18px] py-[8px] rounded-[8px] font-sans text-[13px] font-[700] tracking-[0.3px] hover:bg-[var(--blue-600)] transition shadow-sm"
                   >
@@ -126,8 +133,8 @@ export default async function SimDetailPage({ params }: Props) {
                     Hết hàng
                   </button>
                 )}
-                <a 
-                  href="https://zalo.me/0914123456" 
+                <a
+                  href="https://zalo.me/0914123456"
                   target="_blank"
                   rel="noreferrer"
                   className="flex-1 border border-[var(--blue-500)] text-[var(--blue-500)] px-[18px] py-[8px] rounded-[8px] text-[14px] font-[600] tracking-[0.2px] hover:bg-[var(--blue-50)] transition flex items-center justify-center gap-2"
@@ -135,6 +142,8 @@ export default async function SimDetailPage({ params }: Props) {
                   <MessageCircle size={20} /> Zalo tư vấn
                 </a>
               </div>
+
+              <TrustBadges />
             </div>
 
             {/* Right: Info */}
@@ -197,6 +206,8 @@ export default async function SimDetailPage({ params }: Props) {
         )}
 
       </div>
+
+      {isAvailable && <StickyCTA phone={sim.phone} price={sim.price} />}
     </div>
   )
 }
