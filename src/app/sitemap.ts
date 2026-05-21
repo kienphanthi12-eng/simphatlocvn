@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 import prisma from '@/lib/db'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://simphatlocvn.vercel.app'
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://simphatloc86.vn'
 
   // Lấy danh sách sim
   const allSims = await prisma.sim.findMany()

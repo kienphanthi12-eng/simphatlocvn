@@ -13,7 +13,7 @@ const barlow = Barlow_Condensed({
   display: 'swap',
 })
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://simphatlocvn.vercel.app'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://simphatloc86.vn'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
