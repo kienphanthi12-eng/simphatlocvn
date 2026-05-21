@@ -18,10 +18,10 @@ export default async function SimsPage({ searchParams }: { searchParams: Promise
   else if (params.sort === "price_desc") orderBy = { price: "desc" }
   else if (params.sort === "featured") orderBy = { featured: "desc" }
 
-  const where: Prisma.SimWhereInput = { status: "AVAILABLE" }
+  const where: Prisma.SimWhereInput = {}
   if (params.featured === "true") where.featured = true
 
-  const sims = await prisma.sim.findMany({
+  const allSims = await prisma.sim.findMany({
     where,
     orderBy,
     select: {
@@ -31,8 +31,13 @@ export default async function SimsPage({ searchParams }: { searchParams: Promise
       price: true,
       priceOriginal: true,
       featured: true,
+      status: true,
     },
   })
+
+  // Filter AVAILABLE in JS — DB column is text, not a PG enum, so Prisma
+  // enum comparisons in WHERE clauses cause "operator does not exist" errors.
+  const sims = allSims.filter((s) => s.status === "AVAILABLE")
 
   return (
     <div className="min-h-screen bg-background py-5">
