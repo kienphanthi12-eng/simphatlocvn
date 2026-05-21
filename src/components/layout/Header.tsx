@@ -52,8 +52,13 @@ export default function Header() {
       <div className="mx-auto max-w-7xl flex items-center justify-between px-4 py-3 gap-4">
         {/* Imperial Seal Logo */}
         <Link href="/" className="flex items-center gap-3.5 shrink-0 group">
-          <div className="h-[52px] w-[52px] shrink-0 rounded-xl overflow-hidden border border-gold-deep/60 shadow-md bg-white flex items-center justify-center transition-all duration-300 group-hover:scale-[1.05] relative">
-            <img src="/logo.png" alt="Sim Phát Lộc Logo" className="h-full w-full object-cover scale-[1.08]" />
+          <div className="h-[52px] w-[52px] shrink-0 rounded-xl overflow-hidden border-2 border-gold-deep/80 shadow-md flex items-center justify-center transition-all duration-300 group-hover:scale-[1.05] relative bg-gradient-to-br from-[#7F1D1D] to-[#4a0e0e]">
+            {/* Inner gold frame */}
+            <div className="absolute inset-[3px] rounded-lg border border-gold-deep/50" />
+            {/* Character */}
+            <span className="relative z-10 text-[26px] font-black leading-none" style={{ fontFamily: "var(--font-display)", color: "#C9A84C", textShadow: "0 1px 3px rgba(0,0,0,0.5)" }}>
+              發
+            </span>
           </div>
           <div className="flex flex-col justify-center">
             <div className="flex items-baseline gap-1.5">
