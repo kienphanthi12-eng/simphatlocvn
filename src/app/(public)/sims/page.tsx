@@ -68,6 +68,7 @@ export default async function SimsPage({ searchParams }: { searchParams: Promise
           </div>
 
           <SimsGridClient
+            key={`${params.type ?? ""}-${params.minPrice ?? ""}-${params.maxPrice ?? ""}-${params.search ?? ""}`}
             initialSims={sims}
             initialType={params.type || ""}
             initialSearch={params.search || ""}
