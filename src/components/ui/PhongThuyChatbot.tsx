@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import { MessageSquare, X, Send, Sparkles, Compass, RefreshCw } from "lucide-react"
 
 interface Message {
@@ -8,35 +8,56 @@ interface Message {
   content: string
 }
 
-const parseMessageContent = (content: string) => {
+type ReactPart = React.ReactNode
+
+// Render a plain string segment, converting **bold** and *italic* inline
+function renderInlineMarkdown(text: string, keyPrefix: string): ReactPart[] {
+  const result: ReactPart[] = []
+  // Combined regex: **bold** | *italic*
+  const inlineRegex = /(\*\*([^*]+)\*\*|\*([^*]+)\*)/g
+  let last = 0
+  let m: RegExpExecArray | null
+  while ((m = inlineRegex.exec(text)) !== null) {
+    if (m.index > last) result.push(text.slice(last, m.index))
+    if (m[0].startsWith("**")) {
+      result.push(<strong key={`${keyPrefix}-b-${m.index}`} className="font-bold text-ink">{m[2]}</strong>)
+    } else {
+      result.push(<em key={`${keyPrefix}-i-${m.index}`} className="italic">{m[3]}</em>)
+    }
+    last = inlineRegex.lastIndex
+  }
+  if (last < text.length) result.push(text.slice(last))
+  return result
+}
+
+const parseMessageContent = (content: string): ReactPart[] => {
+  // First pass: split on markdown links [label](url), then apply inline formatting to text segments
   const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g
-  const parts = []
+  const parts: ReactPart[] = []
   let lastIndex = 0
-  let match
+  let match: RegExpExecArray | null
 
   while ((match = linkRegex.exec(content)) !== null) {
     if (match.index > lastIndex) {
-      parts.push(content.slice(lastIndex, match.index))
+      parts.push(...renderInlineMarkdown(content.slice(lastIndex, match.index), `pre-${match.index}`))
     }
-    const label = match[1]
-    const url = match[2]
     parts.push(
       <a
-        key={match.index}
-        href={url}
+        key={`link-${match.index}`}
+        href={match[2]}
         className="text-[#7F1D1D] hover:text-[#991B1B] font-bold underline transition-colors mx-0.5"
       >
-        {label}
+        {match[1]}
       </a>
     )
     lastIndex = linkRegex.lastIndex
   }
 
   if (lastIndex < content.length) {
-    parts.push(content.slice(lastIndex))
+    parts.push(...renderInlineMarkdown(content.slice(lastIndex), `tail`))
   }
 
-  return parts.length > 0 ? parts : content
+  return parts
 }
 
 export function PhongThuyChatbot() {
