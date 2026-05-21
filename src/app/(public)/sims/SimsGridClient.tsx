@@ -20,6 +20,10 @@ interface Sim {
 
 interface Props {
   initialSims: Sim[]
+  initialType?: string
+  initialSearch?: string
+  initialMinPrice?: string
+  initialMaxPrice?: string
 }
 
 const SIM_TYPES: { value: string; label: string }[] = [
@@ -45,11 +49,11 @@ const typeColorMap: Record<string, string> = {
 
 const PAGE_SIZE = 18
 
-export default function SimsGridClient({ initialSims }: Props) {
-  const [typeFilter, setTypeFilter] = useState("")
-  const [search, setSearch] = useState("")
-  const [minPrice, setMinPrice] = useState("")
-  const [maxPrice, setMaxPrice] = useState("")
+export default function SimsGridClient({ initialSims, initialType = "", initialSearch = "", initialMinPrice = "", initialMaxPrice = "" }: Props) {
+  const [typeFilter, setTypeFilter] = useState(initialType)
+  const [search, setSearch] = useState(initialSearch)
+  const [minPrice, setMinPrice] = useState(initialMinPrice)
+  const [maxPrice, setMaxPrice] = useState(initialMaxPrice)
   const [page, setPage] = useState(1)
 
   const filtered = useMemo(() => {

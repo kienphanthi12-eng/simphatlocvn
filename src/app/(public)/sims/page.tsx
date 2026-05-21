@@ -8,6 +8,10 @@ import SimsGridClient from "./SimsGridClient"
 interface SearchParams {
   sort?: string
   featured?: string
+  type?: string
+  minPrice?: string
+  maxPrice?: string
+  search?: string
 }
 
 export default async function SimsPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
@@ -63,7 +67,13 @@ export default async function SimsPage({ searchParams }: { searchParams: Promise
             </div>
           </div>
 
-          <SimsGridClient initialSims={sims} />
+          <SimsGridClient
+            initialSims={sims}
+            initialType={params.type || ""}
+            initialSearch={params.search || ""}
+            initialMinPrice={params.minPrice ? String(Math.round(parseInt(params.minPrice) / 1_000_000)) : ""}
+            initialMaxPrice={params.maxPrice ? String(Math.round(parseInt(params.maxPrice) / 1_000_000)) : ""}
+          />
 
         </main>
       </div>
