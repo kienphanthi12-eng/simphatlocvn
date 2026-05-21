@@ -61,7 +61,7 @@ export default async function CheckoutPage({ searchParams }: { searchParams: { p
           </div>
 
           <div className="p-6 md:p-10">
-            <CheckoutFormClient sim={{ id: sim.id, phone: sim.phone }} />
+            <CheckoutFormClient sim={{ id: sim.id, phone: sim.phone, price: sim.price, type: sim.type }} />
           </div>
         </div>
 
