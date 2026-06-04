@@ -1,6 +1,6 @@
 import prisma from "@/lib/db"
 import { PaymentMethod } from "@prisma/client"
-import { MessageCircle, Home, FileText, Scroll } from "lucide-react"
+import { MessageCircle, Home, Scroll } from "lucide-react"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { formatPhone, formatPrice, getSimTypeLabel } from "@/lib/utils"
@@ -124,7 +124,7 @@ export default async function SuccessPage({ searchParams }: { searchParams: { or
                   {[
                     { label: "Ngân hàng", value: "Vietcombank" },
                     { label: "Số tài khoản", value: "1234 5678 90" },
-                    { label: "Chủ tài khoản", value: "NGUYEN VAN A" },
+                    { label: "Chủ tài khoản", value: "NGUYEN DANH DUONG" },
                     { label: "Nội dung CK", value: order.orderCode, highlight: true },
                     { label: "Số tiền", value: formatPrice(order.totalAmount) },
                   ].map(({ label, value, highlight }) => (
@@ -143,7 +143,7 @@ export default async function SuccessPage({ searchParams }: { searchParams: { or
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-3">
               <a
-                href="https://zalo.me/0914123456"
+                href="https://zalo.me/0822023222"
                 target="_blank"
                 rel="noreferrer"
                 className="flex-1 lacquer border border-gold-deep rounded-xl py-3.5 text-xs font-bold uppercase tracking-[0.25em] shadow-md hover:scale-[1.02] transition-all flex items-center justify-center gap-2.5 text-gold-soft"

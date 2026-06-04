@@ -35,7 +35,7 @@ export default function Header() {
         <div className="mx-auto max-w-7xl flex items-center justify-between px-4 py-2.5 text-[10px] font-sans uppercase tracking-[0.25em]">
           <div className="flex items-center gap-2">
             <Phone className="h-3.5 w-3.5" />
-            <span className="font-mono">0914.123.456</span>
+            <span className="font-mono">0822.023.222</span>
           </div>
           <p className="hidden md:flex font-medium text-gold-soft/90">
             {"Chuyên Sim Vinaphone số đẹp – Đẳng Cấp Hoàng Gia"}
@@ -107,11 +107,11 @@ export default function Header() {
         {/* CTA + mobile toggle */}
         <div className="flex items-center gap-2 shrink-0">
           <a
-            href="tel:0914123456"
+            href="tel:0822023222"
             className="hidden xl:flex items-center gap-2 bg-crimson text-gold-soft px-4 py-2 rounded-lg text-[10px] font-sans font-bold uppercase tracking-[0.25em] shadow-sm hover:shadow-md transition-all border border-gold-deep"
           >
             <Phone className="h-4 w-4" />
-            0914.123.456
+            0822.023.222
           </a>
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
@@ -159,11 +159,11 @@ export default function Header() {
           </Link>
         ))}
         <a
-          href="tel:0914123456"
+          href="tel:0822023222"
           className="mt-4 flex items-center justify-center gap-2 bg-crimson text-gold-soft px-4 py-2.5 rounded-lg text-[10px] font-sans font-bold uppercase tracking-[0.2em] border border-gold-deep interactive-tap"
         >
           <Phone className="h-4 w-4" />
-          0914.123.456
+          0822.023.222
         </a>
       </nav>
     </header>

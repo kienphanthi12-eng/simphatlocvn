@@ -3,7 +3,7 @@
 import { MessageCircle } from "lucide-react"
 import { usePathname } from "next/navigation"
 
-export function ZaloButton({ zaloNumber = "0914123456" }: { zaloNumber?: string }) {
+export function ZaloButton({ zaloNumber = "0822023222" }: { zaloNumber?: string }) {
   const pathname = usePathname()
   
   if (pathname?.startsWith('/admin')) {

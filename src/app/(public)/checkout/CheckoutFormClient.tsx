@@ -245,7 +245,7 @@ export default function CheckoutFormClient({ sim }: CheckoutFormProps) {
             </div>
           ) : (
             <div className="bg-gold/10 border border-gold-deep/25 rounded-xl p-4 space-y-3">
-              <p className="text-xs font-semibold text-ink/75">📍 <span className="text-ink font-bold">Số 68, Đường Trần Phú, Ba Đình, Hà Nội</span></p>
+              <p className="text-xs font-semibold text-ink/75">📍 <span className="text-ink font-bold">Đường Đặng Trần Côn, Thôn Mậu Lâm, Phường Thanh Vinh, Thị xã Phú Thọ, Tỉnh Phú Thọ</span></p>
               <div>
                 <FieldLabel>Ghi chú giờ đến</FieldLabel>
                 <FieldInput {...register("pickupNote")} placeholder="VD: 15h chiều nay" />

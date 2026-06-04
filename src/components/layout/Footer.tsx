@@ -57,9 +57,9 @@ export default function Footer() {
               Liên hệ
             </h4>
             <ul className="space-y-3 text-xs font-medium text-gold-soft/60">
-              <li>📍 Số 68, Đường Trần Phú, Ba Đình, Hà Nội</li>
-              <li>📞 Hotline: <span className="text-gold font-bold font-mono">0914 123 456</span></li>
-              <li>💬 Zalo hỗ trợ: 0914 123 456</li>
+              <li>📍 Đường Đặng Trần Côn, Thôn Mậu Lâm, Phường Thanh Vinh, Thị xã Phú Thọ, Tỉnh Phú Thọ, Việt Nam</li>
+              <li>📞 Hotline: <span className="text-gold font-bold font-mono">0822 023 222</span></li>
+              <li>💬 Zalo hỗ trợ: 0822 023 222</li>
               <li>⏰ Giờ làm việc: 8:00 - 21:00 mỗi ngày</li>
             </ul>
           </div>

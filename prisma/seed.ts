@@ -21,13 +21,13 @@ async function main() {
 
   // 2. Settings
   const settings = [
-    { key: 'hotline', value: '0914 XXX XXX' },
-    { key: 'zalo', value: '0914 XXX XXX' },
-    { key: 'address', value: 'Số XX, Đường ABC, Quận/Huyện, Tỉnh/TP' },
+    { key: 'hotline', value: '0822023222' },
+    { key: 'zalo', value: '0822023222' },
+    { key: 'address', value: 'Đường Đặng Trần Côn, Thôn Mậu Lâm, Phường Thanh Vinh, Thị xã Phú Thọ, Tỉnh Phú Thọ, Việt Nam' },
     { key: 'open_hours', value: '8:00 - 21:00 mỗi ngày' },
     { key: 'bank_name', value: 'Vietcombank' },
     { key: 'bank_account', value: '1234567890' },
-    { key: 'bank_holder', value: 'NGUYEN VAN A' },
+    { key: 'bank_holder', value: 'NGUYEN DANH DUONG' },
   ];
 
   for (const s of settings) {

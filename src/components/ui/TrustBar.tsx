@@ -7,7 +7,7 @@ export function TrustBar() {
         <div className="flex items-center gap-5 text-gold-soft/70">
           <span className="flex items-center gap-1.5">
             <MapPin className="h-3 w-3 text-gold-deep shrink-0" />
-            Số 68, Đường Trần Phú, Ba Đình, Hà Nội
+            Đường Đặng Trần Côn, Thôn Mậu Lâm, Phường Thanh Vinh, Thị xã Phú Thọ, Tỉnh Phú Thọ
           </span>
           <span className="flex items-center gap-1.5">
             <Clock className="h-3 w-3 text-gold-deep shrink-0" />
@@ -17,13 +17,13 @@ export function TrustBar() {
         <div className="flex items-center gap-5 text-gold-soft/70">
           <span className="flex items-center gap-1.5">
             <Phone className="h-3 w-3 text-gold-deep shrink-0" />
-            <a href="tel:0914123456" className="hover:text-gold-soft transition-colors">
-              0914 123 456
+            <a href="tel:0822023222" className="hover:text-gold-soft transition-colors">
+              0822 023 222
             </a>
           </span>
           <span className="flex items-center gap-1.5 text-green-400/80">
             <ShieldCheck className="h-3 w-3 shrink-0" />
-            ĐKKD: 0123456789 – Sở KH&ĐT Hà Nội
+            ĐKKD: 2500758518 – Sở KH&ĐT Tỉnh Phú Thọ
           </span>
         </div>
       </div>

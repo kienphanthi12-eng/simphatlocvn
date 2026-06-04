@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: `Sim Vinaphone ${formatPhone(sim.phone)} — ${label} Giá ${price} | Sim Phát Lộc`,
-    description: `Mua sim Vinaphone ${formatPhone(sim.phone)}, loại ${label}, giá ${price}. Chính hãng, giá gốc. Giao toàn quốc hoặc đến lấy tại cửa hàng. Hotline: 0914 123 456`,
+    description: `Mua sim Vinaphone ${formatPhone(sim.phone)}, loại ${label}, giá ${price}. Chính hãng, giá gốc. Giao toàn quốc hoặc đến lấy tại cửa hàng. Hotline: 0822 023 222`,
   }
 }
 
@@ -134,7 +134,7 @@ export default async function SimDetailPage({ params }: Props) {
                   </button>
                 )}
                 <a
-                  href="https://zalo.me/0914123456"
+                  href="https://zalo.me/0822023222"
                   target="_blank"
                   rel="noreferrer"
                   className="flex-1 border border-[var(--blue-500)] text-[var(--blue-500)] px-[18px] py-[8px] rounded-[8px] text-[14px] font-[600] tracking-[0.2px] hover:bg-[var(--blue-50)] transition flex items-center justify-center gap-2"
@@ -173,7 +173,7 @@ export default async function SimDetailPage({ params }: Props) {
 
               {sim.description && (
                 <div className="mt-6 bg-gray-50 p-4 rounded-lg">
-                  <p className="text-sm text-gray-700 italic">"{sim.description}"</p>
+                  <p className="text-sm text-gray-700 italic">&ldquo;{sim.description}&rdquo;</p>
                 </div>
               )}
             </div>
