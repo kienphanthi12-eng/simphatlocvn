@@ -8,33 +8,35 @@ export async function GET(req: NextRequest) {
     const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
-    const [
-      totalSims,
-      soldSims,
-      pendingOrders,
-      todayOrders,
-      monthRevenueData,
-      recentOrders
-    ] = await Promise.all([
-      prisma.sim.count({ where: { status: 'AVAILABLE' } }),
-      prisma.sim.count({ where: { status: 'SOLD' } }),
-      prisma.order.count({ where: { status: OrderStatus.PENDING } }),
-      prisma.order.count({ where: { createdAt: { gte: startOfDay } } }),
-      prisma.order.aggregate({
-        _sum: { totalAmount: true },
-        where: {
-          status: OrderStatus.DELIVERED,
-          createdAt: { gte: startOfMonth }
-        }
+    const [allSims, allOrders] = await Promise.all([
+      prisma.sim.findMany({
+        select: { status: true }
       }),
       prisma.order.findMany({
-        orderBy: { createdAt: "desc" },
-        take: 5,
-        include: {
+        select: {
+          id: true,
+          status: true,
+          totalAmount: true,
+          createdAt: true,
+          customerName: true,
+          customerPhone: true,
           sim: { select: { phone: true } }
         }
       })
     ]);
+
+    const totalSims = allSims.filter(s => s.status === 'AVAILABLE').length;
+    const soldSims = allSims.filter(s => s.status === 'SOLD').length;
+    const pendingOrders = allOrders.filter(o => o.status === 'PENDING').length;
+    const todayOrders = allOrders.filter(o => new Date(o.createdAt) >= startOfDay).length;
+    
+    const monthRevenue = allOrders
+      .filter(o => o.status === 'DELIVERED' && new Date(o.createdAt) >= startOfMonth)
+      .reduce((sum, o) => sum + o.totalAmount, 0);
+
+    const recentOrders = [...allOrders]
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .slice(0, 5);
 
     return NextResponse.json({
       data: {
@@ -42,7 +44,7 @@ export async function GET(req: NextRequest) {
         soldSims,
         pendingOrders,
         todayOrders,
-        monthRevenue: monthRevenueData._sum.totalAmount || 0,
+        monthRevenue,
         recentOrders
       }
     });

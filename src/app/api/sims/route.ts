@@ -17,13 +17,7 @@ export async function GET(req: NextRequest) {
     const sort = searchParams.get("sort");
     const featured = searchParams.get("featured");
 
-    const where: Prisma.SimWhereInput = {
-      status: 'AVAILABLE',
-    };
-
-    if (type) {
-      where.type = type as any;
-    }
+    const where: Prisma.SimWhereInput = {};
     
     if (minPrice || maxPrice) {
       where.price = {};
@@ -45,25 +39,34 @@ export async function GET(req: NextRequest) {
     else if (sort === "price_desc") orderBy = { price: "desc" };
     else if (sort === "featured") orderBy = { featured: "desc" };
 
-    const [data, total] = await Promise.all([
-      prisma.sim.findMany({
-        where,
-        orderBy,
-        skip,
-        take: limit,
-        select: {
-          id: true,
-          phone: true,
-          prefix: true,
-          type: true,
-          price: true,
-          priceOriginal: true,
-          featured: true,
-          createdAt: true,
-        }
-      }),
-      prisma.sim.count({ where })
-    ]);
+    const allSims = await prisma.sim.findMany({
+      where,
+      orderBy,
+      select: {
+        id: true,
+        phone: true,
+        prefix: true,
+        type: true,
+        price: true,
+        priceOriginal: true,
+        featured: true,
+        status: true,
+        createdAt: true,
+      }
+    });
+
+    // Filter in JS to avoid Postgres enum mismatch errors
+    const filteredSims = allSims.filter((s) => {
+      if (s.status !== 'AVAILABLE') return false;
+      if (type && s.type !== type) return false;
+      return true;
+    });
+
+    const paginatedData = filteredSims.slice(skip, skip + limit);
+    const total = filteredSims.length;
+
+    // Remove status field from the return data to match client expectations
+    const data = paginatedData.map(({ status, ...rest }) => rest);
 
     return NextResponse.json({
       data,

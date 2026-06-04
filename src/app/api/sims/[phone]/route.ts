@@ -17,14 +17,11 @@ export async function GET(
       return NextResponse.json({ error: "Sim không tồn tại" }, { status: 404 });
     }
 
-    // Lấy 5 sim cùng loại
-    const relatedSims = await prisma.sim.findMany({
+    // Lấy tất cả sim khác và lọc trong JS để tránh lỗi enum Postgres
+    const allSims = await prisma.sim.findMany({
       where: {
-        type: sim.type,
-        status: 'AVAILABLE',
         id: { not: sim.id }
       },
-      take: 5,
       select: {
         id: true,
         phone: true,
@@ -33,8 +30,14 @@ export async function GET(
         price: true,
         priceOriginal: true,
         featured: true,
+        status: true,
       }
     });
+
+    const relatedSims = allSims
+      .filter((s) => s.type === sim.type && s.status === 'AVAILABLE')
+      .slice(0, 5)
+      .map(({ status, ...rest }) => rest);
 
     return NextResponse.json({
       data: {
